@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maurice Brand — Contact</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Reenie+Beanie&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   MAURICE BRAND — CONTACT
+   A vintage par-avion airmail envelope, sitting in the same
+   warm, classical, aged-paper world as the rest of the site.
+   ============================================================ */
+:root{
+  --ink:#2c2419;
+  --ink-soft:#544a3b;
+  --serif:"EB Garamond",Georgia,"Times New Roman",serif;
+  --engrave:"Cinzel",Georgia,serif;
+  --hand:"Reenie Beanie",cursive;
+  --paper:#efe6d0;
+  --paper-edge:#e6dcc1;
+  --air-red:#b23a2e;
+  --air-blue:#3c5a86;
+  --rule-blue:#6f86a8;
+}
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0; min-height:100%;
+  font-family:var(--serif); color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  background:#d6cab2 url("desk-bg.png") center top / cover no-repeat fixed;
+}
+
+/* ---- fixed photographic overlays so the page reads as one aged photo ---- */
+.fx{ position:fixed; inset:0; pointer-events:none; }
+.desk-grain{ z-index:1; opacity:.4; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.7'/%3E%3C/svg%3E");
+  background-size:150px 150px; }
+.vignette{ z-index:6;
+  background:radial-gradient(135% 120% at 50% 38%, transparent 56%, rgba(60,44,24,0.13) 90%, rgba(48,34,18,0.24) 100%); }
+
+/* ---------------- Topbar (matches the other pages) ---------------- */
+.topbar{
+  position:fixed; top:0; left:0; right:0; z-index:8;
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+  padding:34px clamp(22px,3.6vw,58px) 0; pointer-events:none;
+}
+.wordmark{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(16px,1.35vw,21px); letter-spacing:0.24em; text-transform:uppercase;
+  color:#2f2719; pointer-events:auto; white-space:nowrap; text-decoration:none;
+  padding-bottom:8px; padding-right:2px; border-bottom:1px solid #241d10; line-height:1;
+  text-shadow:0 0 12px rgba(247,240,223,0.5), 0 0 22px rgba(247,240,223,0.32);
+}
+.wordmark .dot{ opacity:.5; padding:0 .12em; }
+nav.menu{ pointer-events:auto; }
+nav.menu ul{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:nowrap; gap:clamp(12px,1.5vw,28px); justify-content:flex-end; }
+nav.menu li{ white-space:nowrap; }
+nav.menu a{
+  font-family:var(--serif); font-weight:500; font-size:clamp(11px,0.92vw,14px); letter-spacing:0.13em; text-transform:uppercase;
+  color:#453a28; text-decoration:none; padding-bottom:4px; position:relative; transition:color .35s ease; white-space:nowrap;
+  text-shadow:0 0 11px rgba(247,240,223,0.42), 0 0 18px rgba(247,240,223,0.26);
+}
+nav.menu a::before{ content:""; position:absolute; left:0; right:0; bottom:0; height:1px; background:currentColor; opacity:0.16; }
+nav.menu a::after{ content:""; position:absolute; left:0; right:100%; bottom:0; height:1px; background:var(--ink); transition:right .42s cubic-bezier(.2,.7,.2,1); }
+nav.menu a:hover,nav.menu a.active{ color:var(--ink); }
+nav.menu a:hover::after,nav.menu a.active::after{ right:0; }
+nav.menu a.active::after{ height:1.5px; }
+.header-veil{
+  position:fixed; top:0; left:0; right:0; height:118px; z-index:7; pointer-events:none;
+  background:
+    radial-gradient(230px 88px at 11% 40px, rgba(246,239,222,0.17), transparent 72%),
+    radial-gradient(560px 92px at 80% 40px, rgba(246,239,222,0.15), transparent 74%);
+}
+
+/* ---------------- Page shell ---------------- */
+.page{ position:relative; z-index:3; max-width:1340px; margin:0 auto;
+  padding:clamp(116px,14vh,164px) clamp(20px,4vw,60px) clamp(70px,10vh,120px); }
+
+.page-title{ text-align:center; margin:0 0 clamp(34px,5vh,56px); }
+.page-title h1{
+  font-family:var(--engrave); font-weight:500; margin:0;
+  font-size:clamp(34px,5.2vw,62px); letter-spacing:0.12em; text-transform:uppercase;
+  color:#2c2519;
+  text-shadow:0 0 16px rgba(247,240,223,0.45);
+}
+.page-title .rule{ width:46px; height:2px; background:#3a3024; opacity:.6; margin:20px auto 0; }
+
+/* ---------------- The airmail envelope (aged + worn) ----------------
+   Built from separately-filtered layers so the OUTER edges and the
+   par-avion border go irregular/worn (SVG displacement) while the
+   text content stays crisp and readable on top. */
+.envelope{ position:relative; max-width:1180px; margin:0 auto; padding:18px; }
+
+/* par-avion border — faded watercolour inks, displaced into a gently worn edge */
+.env-frame{
+  position:absolute; inset:0; z-index:0; border-radius:6px;
+  background:
+    repeating-linear-gradient(45deg,
+      #b4584e 0 17px,
+      #efe7d2 17px 30px,
+      #61788f 30px 47px,
+      #efe7d2 47px 60px);
+  filter:url(#envedge);
+}
+/* pale watercolour wash + worn, lightened corners (dashes thin out at the edges) */
+.env-frame::before{
+  content:""; position:absolute; inset:0; border-radius:6px; pointer-events:none;
+  background:
+    radial-gradient(circle at 0 0, rgba(240,232,212,0.96), rgba(240,232,212,0) 74px),
+    radial-gradient(circle at 100% 0, rgba(240,232,212,0.96), rgba(240,232,212,0) 74px),
+    radial-gradient(circle at 0 100%, rgba(240,232,212,0.96), rgba(240,232,212,0) 74px),
+    radial-gradient(circle at 100% 100%, rgba(240,232,212,0.96), rgba(240,232,212,0) 74px),
+    linear-gradient(rgba(240,232,212,0.24), rgba(240,232,212,0.24));
+}
+/* grime + watercolour unevenness over the stripe */
+.env-frame::after{
+  content:""; position:absolute; inset:0; border-radius:6px; pointer-events:none; mix-blend-mode:multiply; opacity:.55;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='130'%3E%3Cfilter id='ng'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ng)' opacity='0.6'/%3E%3C/svg%3E");
+  background-size:120px 120px;
+}
+
+/* the cream writing paper — lighter centre, gently aged toward the edges */
+.env-paper{
+  position:absolute; inset:17px; z-index:1; border-radius:3px;
+  background:radial-gradient(155% 135% at 50% 40%, #f4ecd8 48%, #e8ddc1 100%);
+  box-shadow:inset 0 0 66px rgba(122,90,48,0.17), inset 0 0 16px rgba(110,80,42,0.11);
+  filter:url(#paperedge);
+}
+/* stains, foxing spots, fibre grain on the paper */
+.env-tex{ position:absolute; inset:17px; z-index:2; pointer-events:none; border-radius:2px; overflow:hidden; }
+.env-tex::before{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(150px 120px at 90% 88%, rgba(140,104,56,0.08), transparent 72%);
+}
+.env-tex::after{
+  content:""; position:absolute; inset:0; mix-blend-mode:multiply; opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='pg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pg)' opacity='0.45'/%3E%3C/svg%3E");
+  background-size:150px 150px;
+}
+
+.env-content{ position:relative; z-index:6; padding:clamp(34px,3.6vw,54px) clamp(30px,3.4vw,50px) clamp(38px,3.8vw,56px); }
+
+/* centre divider — faded, slightly broken ink line */
+.divider{ position:absolute; left:50%; top:8%; bottom:8%; width:2px; z-index:4;
+  background:linear-gradient(180deg, transparent, rgba(44,36,25,0.5) 6%, rgba(44,36,25,0.5) 94%, transparent);
+  transform:translateX(-50%);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='120'%3E%3Cfilter id='dm'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04 0.5' numOctaves='2' seed='6'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23dm)'/%3E%3C/svg%3E") center/100% 200px;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='120'%3E%3Cfilter id='dm'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04 0.5' numOctaves='2' seed='6'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23dm)'/%3E%3C/svg%3E") center/100% 200px;
+}
+
+.layout{ position:relative; z-index:2; display:grid; grid-template-columns:1fr 1fr; gap:clamp(40px,5vw,86px); align-items:stretch; }
+
+/* ---------------- left — the form ---------------- */
+.form-side{ display:flex; flex-direction:column; }
+.field-row{ display:grid; grid-template-columns:minmax(96px,auto) 1fr; align-items:center; gap:18px; margin-bottom:clamp(16px,1.6vw,22px); }
+.lbl{ font-family:var(--serif); font-weight:500; text-transform:uppercase; letter-spacing:0.16em;
+  font-size:clamp(12px,0.95vw,14px); color:var(--ink); white-space:nowrap; }
+.fld{
+  width:100%; font-family:var(--serif); font-size:18px; color:var(--ink);
+  background:rgba(255,252,244,0.30); border:1px solid rgba(70,56,34,0.55); border-radius:2px;
+  padding:9px 11px; outline:none; transition:border-color .3s ease, background .3s ease;
+}
+.fld:focus{ border-color:rgba(40,30,16,0.92); background:rgba(255,252,244,0.55); }
+.field-block{ margin-top:clamp(4px,0.6vw,10px); margin-bottom:clamp(20px,2.4vw,30px); }
+.field-block .lbl{ display:block; margin-bottom:10px; }
+textarea.fld{ width:100%; min-height:170px; resize:both; line-height:1.5; }
+
+.send{
+  margin-top:auto; display:flex; align-items:center; gap:18px;
+  background:none; border:none; padding:8px 0; cursor:pointer; width:100%;
+}
+.send .rule-h{ flex:1; height:1px; background:rgba(60,46,26,0.6); }
+.send .send-txt{ font-family:var(--serif); font-weight:500; text-transform:uppercase; letter-spacing:0.22em;
+  font-size:clamp(13px,1.05vw,16px); color:var(--ink); white-space:nowrap; transition:color .3s ease; }
+.send:hover .send-txt{ color:#000; }
+.send:hover .rule-h{ background:rgba(40,28,14,0.85); }
+
+/* sent confirmation */
+.sent-note{ display:none; font-size:clamp(17px,1.4vw,20px); line-height:1.7; color:#33291d; align-self:center; text-align:center; margin:auto 0; }
+.sent-note .big{ display:block; font-family:var(--engrave); letter-spacing:0.04em; font-size:1.2em; margin-bottom:.5em; color:#2c2519; }
+.form-side.is-sent .field-row,
+.form-side.is-sent .field-block,
+.form-side.is-sent .send{ display:none; }
+.form-side.is-sent .sent-note{ display:block; }
+
+/* ---------------- right — the address side ---------------- */
+.addr-side{ position:relative; min-height:380px; }
+.addr-lines{ max-width:344px; margin-top:clamp(24px,3.2vw,52px); }
+.rust-rule{ height:1.5px; background:#b0544a; opacity:.82; margin:6px 0 7px; }
+.aline{ height:46px; border-bottom:1px solid rgba(96,120,154,0.5); display:flex; align-items:flex-end; padding-bottom:5px; }
+.aline.spacer{ height:24px; border-bottom:none; }
+.aline a{ font-family:var(--serif); font-size:21px; color:#312615; text-decoration:none; letter-spacing:0.01em; }
+.aline a:hover{ text-decoration:underline; text-underline-offset:3px; }
+.aline.msg{ font-family:var(--hand); font-size:28px; color:#33281a; line-height:1; padding-bottom:0; letter-spacing:0.01em;
+  transform:translateY(7px); filter:url(#inkrough); }
+.aline.email{ font-family:var(--hand); font-size:28px; color:#33281a; padding-bottom:0; letter-spacing:0.01em;
+  transform:translateY(7px); filter:url(#inkrough); }
+.aline.email .to{ margin-right:0.5em; }
+.aline.email a{ font-family:var(--hand); font-size:28px; color:#33281a; }
+
+/* postage stamp — tucked into the top-right corner, aged, upright */
+.stamp{ position:absolute; top:-16px; right:-12px; width:102px; height:123px; transform:rotate(-1deg); }
+.stamp svg{ display:block; width:100%; height:100%; filter:url(#stampedge) sepia(0.1) contrast(0.97) brightness(1.02); }
+.stamp::after{ content:""; position:absolute; inset:-2%; pointer-events:none; border-radius:2px; mix-blend-mode:multiply; opacity:.42;
+  background:
+    radial-gradient(120% 120% at 82% 92%, rgba(38,24,8,0.30), transparent 58%),
+    radial-gradient(100% 90% at 16% 14%, rgba(40,26,10,0.14), transparent 52%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='sg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23sg)' opacity='0.6'/%3E%3C/svg%3E");
+  background-size:auto,auto,80px 80px; }
+
+/* priority postmark — lower-right, distressed rubber-stamp ink */
+.postmark{
+  position:absolute; right:-8px; bottom:4px;
+  font-family:var(--serif); font-weight:600; text-transform:uppercase;
+  color:#a8473a; letter-spacing:0.05em; line-height:1.08; text-align:center;
+  padding:12px 22px; border:2.5px solid #a8473a; border-radius:11px;
+  transform:rotate(-9deg); opacity:0.84; mix-blend-mode:multiply;
+  font-size:clamp(21px,1.7vw,26px);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='120'%3E%3Cfilter id='pmd'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.09 0.11' numOctaves='2' seed='8'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.5 0 0 0 -0.06'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pmd)'/%3E%3C/svg%3E") center/180px 130px;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='120'%3E%3Cfilter id='pmd'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.09 0.11' numOctaves='2' seed='8'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.5 0 0 0 -0.06'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pmd)'/%3E%3C/svg%3E") center/180px 130px;
+}
+.postmark::before{ content:""; position:absolute; inset:3px; border:1px solid #a8473a; border-radius:7px; opacity:.85; }
+.postmark .pm-sub{ font-weight:600; font-size:0.92em; letter-spacing:0.02em; }
+
+/* ---------------- responsive ----------------
+   A two-column envelope needs real width to breathe, so the halves
+   stack below 1240px (where the reference two-column look would crowd
+   the stamp / wrap the handwritten note). Form first, then address. */
+@media (max-width:1240px){
+  .layout{ grid-template-columns:1fr; gap:48px; }
+  .divider{ display:none; }
+  .addr-side{ min-height:auto; }
+  .addr-lines{ max-width:520px; margin-top:0; }
+  .send{ margin-top:30px; }
+}
+@media (max-width:720px){
+  .topbar{ flex-direction:column; gap:12px; align-items:flex-start; padding-top:24px; }
+  nav.menu ul{ gap:13px; flex-wrap:wrap; justify-content:flex-start; }
+}
+@media (max-width:520px){
+  .stamp{ width:98px; height:118px; }
+  .postmark{ font-size:18px; padding:9px 14px; }
+  .addr-lines{ max-width:none; }
+  .field-row{ grid-template-columns:1fr; gap:6px; }
+  .lbl{ white-space:normal; }
+  .aline.hand{ font-size:26px; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="wordmark" href="index.html" aria-label="Maurice Brand, home">Maurice<span class="dot">·</span>Brand</a>
+  <nav class="menu" aria-label="Primary">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html">Novels</a></li>
+      <li><a href="index.html">Short Stories</a></li>
+      <li><a href="biography.html">Biography</a></li>
+      <li><a href="inspiration.html">Inspiration</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="page-title">
+    <h1>Contact</h1>
+    <div class="rule"></div>
+  </div>
+
+  <div class="envelope">
+    <div class="env-frame" aria-hidden="true"></div>
+    <div class="env-paper" aria-hidden="true"></div>
+    <div class="env-tex" aria-hidden="true"></div>
+    <div class="env-content">
+      <div class="divider"></div>
+      <div class="layout">
+
+        <!-- LEFT: the message form -->
+        <form class="form-side" id="contactForm" novalidate>
+          <div class="field-row">
+            <label class="lbl" for="f-name">Name</label>
+            <input class="fld" id="f-name" name="name" type="text" autocomplete="name" />
+          </div>
+          <div class="field-row">
+            <label class="lbl" for="f-email">Email</label>
+            <input class="fld" id="f-email" name="email" type="email" autocomplete="email" />
+          </div>
+          <div class="field-row">
+            <label class="lbl" for="f-phone">Phone Number</label>
+            <input class="fld" id="f-phone" name="phone" type="tel" autocomplete="tel" />
+          </div>
+          <div class="field-block">
+            <label class="lbl" for="f-msg">Message</label>
+            <textarea class="fld" id="f-msg" name="message"></textarea>
+          </div>
+          <button class="send" type="submit">
+            <span class="rule-h"></span>
+            <span class="send-txt">Send Message</span>
+            <span class="rule-h"></span>
+          </button>
+          <p class="sent-note">
+            <span class="big">Sent.</span>
+            Your letter is on its way — thank you for writing.
+          </p>
+        </form>
+
+        <!-- RIGHT: the addressed side -->
+        <div class="addr-side">
+          <div class="addr-lines">
+            <div class="rust-rule"></div>
+            <div class="aline email"><span class="to">To:</span> <a href="mailto:hello@mauricebrand.com">hello@mauricebrand.com</a></div>
+            <div class="aline"></div>
+            <div class="aline msg">I read every message and value</div>
+            <div class="aline msg">the time you take to write.</div>
+            <div class="aline msg">Thank you.</div>
+            <div class="aline"></div>
+          </div>
+
+          <!-- postage stamp -->
+          <div class="stamp" aria-hidden="true">
+            <svg viewBox="0 0 130 156" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="stampface" cx="50%" cy="44%" r="72%">
+                  <stop offset="0%" stop-color="#73603f"/>
+                  <stop offset="100%" stop-color="#564530"/>
+                </radialGradient>
+              </defs>
+              <rect x="5" y="5" width="120" height="146" fill="url(#stampface)"/>
+              <rect x="10" y="10" width="110" height="136" fill="none" stroke="#e7dabd" stroke-width="1" opacity="0.5"/>
+              <text x="65" y="24" text-anchor="middle" fill="#ece0c4" font-family="Cinzel, Georgia, serif" font-size="7.4" letter-spacing="0.5" opacity="0.9">POSTE·LITTÉRAIRE</text>
+              <!-- ornate beaded cartouche -->
+              <ellipse cx="65" cy="84" rx="30" ry="43" fill="none" stroke="#e7dabd" stroke-width="2" stroke-dasharray="0.2 4.2" stroke-linecap="round" opacity="0.85"/>
+              <ellipse cx="65" cy="84" rx="25" ry="37" fill="none" stroke="#e7dabd" stroke-width="0.7" opacity="0.5"/>
+              <!-- MB monogram -->
+              <text x="58" y="86" text-anchor="middle" fill="#efe4c9" font-family="Cinzel, Georgia, serif" font-weight="600" font-size="42">M</text>
+              <text x="74" y="101" text-anchor="middle" fill="#efe4c9" font-family="Cinzel, Georgia, serif" font-weight="600" font-size="42">B</text>
+              <!-- denomination -->
+              <text x="65" y="140" text-anchor="middle" fill="#ece0c4" font-family="Cinzel, Georgia, serif" font-weight="600" font-size="12" letter-spacing="1.4">10 CENTS</text>
+              <g id="perf" fill="#f1e9d4"></g>
+            </svg>
+          </div>
+
+          <!-- priority postmark -->
+          <div class="postmark" aria-hidden="true">
+            Priority /<br /><span class="pm-sub">Prioritaire</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="fx desk-grain"></div>
+<div class="fx vignette"></div>
+<div class="header-veil"></div>
+
+<!-- aging filters: worn edges + inked text (shared vocabulary with the homepage) -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <filter id="envedge" x="-6%" y="-8%" width="112%" height="116%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.015" numOctaves="3" seed="7" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="4" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feDropShadow dx="1" dy="14" stdDeviation="16" flood-color="rgba(40,28,12,0.30)"/>
+    </filter>
+    <filter id="paperedge" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.016 0.022" numOctaves="3" seed="12" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="stampedge" x="-14%" y="-14%" width="128%" height="128%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.07" numOctaves="2" seed="9" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="3.4" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feDropShadow dx="2" dy="5" stdDeviation="5" flood-color="rgba(40,28,12,0.34)"/>
+    </filter>
+    <filter id="inkrough" x="-12%" y="-30%" width="124%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="4" result="coarse"/>
+      <feDisplacementMap in="SourceGraphic" in2="coarse" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d1"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.09 0.12" numOctaves="2" seed="7" result="fine"/>
+      <feDisplacementMap in="d1" in2="fine" scale="1.0" xChannelSelector="R" yChannelSelector="G" result="d2"/>
+      <feTurbulence type="turbulence" baseFrequency="0.34 0.5" numOctaves="1" seed="13" result="sp"/>
+      <feColorMatrix in="sp" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 7 -5.2" result="spm"/>
+      <feComponentTransfer in="spm" result="gaps"><feFuncA type="discrete" tableValues="0 0 0 0.5 0.65"/></feComponentTransfer>
+      <feComposite in="d2" in2="gaps" operator="out" result="bleed"/>
+      <feMerge><feMergeNode in="bleed"/><feMergeNode in="d2"/></feMerge>
+    </filter>
+  </defs>
+</svg>
+
+<script>
+/* perforated stamp edge — cream notches, jittered so they read as aged paper */
+(function(){
+  const g = document.getElementById('perf');
+  if(!g) return;
+  const W=130, H=156, step=10;
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const add=(cx,cy)=>{ const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',(cx+rnd(-0.5,0.5)).toFixed(1)); c.setAttribute('cy',(cy+rnd(-0.5,0.5)).toFixed(1));
+    c.setAttribute('r',rnd(3.7,4.6).toFixed(1)); g.appendChild(c); };
+  for(let x=step/2; x<=W-step/2+0.1; x+=step){ add(x,5); add(x,H-5); }
+  for(let y=step/2; y<=H-step/2+0.1; y+=step){ add(5,y); add(W-5,y); }
+})();
+
+/* submit → confirmation in place (no backend) */
+(function(){
+  const form=document.getElementById('contactForm');
+  form.addEventListener('submit', e=>{
+    e.preventDefault();
+    form.classList.add('is-sent');
+  });
+})();
+</script>
+
+</body>
+</html>

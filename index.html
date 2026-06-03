@@ -378,9 +378,9 @@ nav.menu a.active::after{ height:1.5px; }
       <li><a href="#home" class="active" data-nav="Home">Home</a></li>
       <li><a href="#novels" data-nav="Novels">Novels</a></li>
       <li><a href="#short-stories" data-nav="Short Stories">Short Stories</a></li>
-      <li><a href="#biography" data-nav="Biography">Biography</a></li>
-      <li><a href="#inspiration" data-nav="Inspiration">Inspiration</a></li>
-      <li><a href="#contact" data-nav="Contact">Contact</a></li>
+      <li><a href="/biography" data-page="Biography">Biography</a></li>
+      <li><a href="/inspiration" data-page="Inspiration">Inspiration</a></li>
+      <li><a href="/contact" data-page="Contact">Contact</a></li>
     </ul>
   </nav>
 </header>
@@ -455,7 +455,7 @@ const CONFIG = {
   notes: [
     { nav:'Short Stories', z:6, img:'topleft-pair.png', x:'264px', y:'312px', w:'474px', h:'351px', rot:'-1deg',
       fs:'30px', lg:'2px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(30% + 3px);right:calc(6% - 3px);top:12%;', extra:'near', hand:'hand-neat', htilt:'-3deg',
-      lines:[ {t:"Three cars sit in the lot"}, {t:"beneath lights that bloom"}, {t:"like dandelions"}, {t:"before they come apart"}, {t:"in the wind."} ] },
+      lines:[ {t:"The lights above them"}, {t:"bloom like dandelions"}, {t:"coming apart"}, {t:"in the wind."} ] },
 
     { nav:'Biography', z:7, img:'paper-lined.png', x:'662px', y:'306px', w:'286px', h:'206px', rot:'2deg',
       ty:'36%', fs:'33px', lg:'3px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(8% - 5px);right:calc(8% + 5px);top:calc(36% - 10px);', extra:'far', hand:'hand-small', htilt:'-5deg',
@@ -476,7 +476,7 @@ const CONFIG = {
     /* centre — the finale (the dominant sheet; never shrunk) — real spiral-torn page */
     { nav:'Home', z:9, img:'paper-center.png', x:'766px', y:'562px', w:'552px', h:'400px', rot:'-1deg',
       ty:'12%', fs:'33px', lg:'3px', font:"'Reenie Beanie', cursive", hero:true, extra:'hero', hand:'hand-neat', htilt:'-2deg',
-      lines:[ {t:"Somewhere, a tiger paces a"}, {t:"small enclosure, while elsewhere,"}, {t:"in a forest no one has ever"}, {t:"named, another tiger walks"}, {t:"freely and settles accounts"}, {t:"with boars and deer. One tiger"}, {t:"pays for the other,"}, {t:"and neither knows it."} ] },
+      lines:[ {t:"Somewhere, a tiger paces a"}, {t:"small enclosure, while elsewhere,"}, {t:"in a forest no one has ever"}, {t:"named, another tiger walks freely,"}, {t:"settling accounts with boars"}, {t:"and deer. One tiger pays for"}, {t:"the other, and neither knows it."} ] },
   ],
 };
 
@@ -510,7 +510,7 @@ function el(cls, css){ const d=document.createElement('div'); d.className=cls; i
   const closed = document.createElement('img'); closed.className='env-closed'; closed.src='envelope-closed.png'; closed.alt='Contact'; closed.draggable=false;
   const label = el('env-label'); label.textContent='Contact';
   s.appendChild(closed); s.appendChild(label);
-  s.addEventListener('click', ()=>openSection('Contact','a door left ajar'));
+  s.addEventListener('click', ()=>{ window.location.href='/contact'; });
   stage.appendChild(s);
 })();
 
@@ -522,7 +522,7 @@ function el(cls, css){ const d=document.createElement('div'); d.className=cls; i
   const dark = el('photo-dark');
   const label = el('photo-label'); label.textContent='Biography';
   s.appendChild(im); s.appendChild(dark); s.appendChild(label);
-  s.addEventListener('click', ()=>openSection('Biography','the writer at his desk'));
+  s.addEventListener('click', ()=>{ window.location.href='/biography'; });
   stage.appendChild(s);
 })();
 
