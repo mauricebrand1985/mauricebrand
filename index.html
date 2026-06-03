@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maurice Brand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- handwriting (ink) + editorial serif (chrome) -->
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600&family=Handlee&family=Reenie+Beanie&family=Nothing+You+Could+Do&family=Dawning+of+a+New+Day&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   MAURICE BRAND — a living writer's homepage (flat / aged-paper)
+   Loose, real-feeling paper scraps lie flat on a warm desk.
+   A fountain pen glides in and writes each fragment, then rests.
+   Tunable knobs live in CONFIG (see <script>).
+   ============================================================ */
+
+:root{
+  --ink:#2c2620;
+  --ink-soft:#5a5040;
+  --label:#6f6048;
+  --stamp:#9a5240;
+  --hw-font:"Caveat","Segoe Script",cursive;
+  --serif:"EB Garamond",Georgia,"Times New Roman",serif;
+}
+*{ box-sizing:border-box; }
+html,body{ height:100%; margin:0; }
+body{
+  font-family:var(--serif);
+  color:var(--ink);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  /* real desk-paper photograph, stretched to fill the viewport */
+  background:#d6cab2 url("desk-bg.png") center center / cover no-repeat fixed;
+}
+/* the photographic desk already carries tone; keep these overlays minimal */
+.desk-stains{
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:
+    radial-gradient(closest-side at 12% 22%, rgba(110,84,46,0.05), transparent 70%);
+}
+.desk-grain{
+  position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.4; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.7'/%3E%3C/svg%3E");
+  background-size:150px 150px;
+}
+.vignette{
+  position:fixed; inset:0; z-index:6; pointer-events:none;
+  background:radial-gradient(135% 120% at 50% 42%, transparent 55%, rgba(60,44,24,0.16) 90%, rgba(48,34,18,0.30) 100%);
+}
+/* heavy photographic film grain over the WHOLE scene (papers + desk) so it reads as one grainy photo */
+.photo-grain{
+  position:fixed; inset:0; z-index:5; pointer-events:none; opacity:.6; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='fg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fg)' opacity='0.7'/%3E%3C/svg%3E");
+  background-size:160px 160px;
+}
+.photo-grain.fine{ mix-blend-mode:soft-light; opacity:.5; background-size:84px 84px; }
+.photo-grain.coarse{ mix-blend-mode:multiply; opacity:.3; background-size:300px 300px; }
+
+/* ---------------- Topbar ---------------- */
+.topbar{
+  position:fixed; top:0; left:0; right:0; z-index:8;
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+  padding:34px clamp(22px,3.6vw,58px) 0; pointer-events:none;
+}
+.wordmark{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(16px,1.35vw,21px); letter-spacing:0.24em; text-transform:uppercase;
+  color:#2f2719; pointer-events:auto; white-space:nowrap; text-decoration:none;
+  padding-bottom:8px; padding-right:2px; border-bottom:1px solid #241d10; line-height:1;
+  /* ivory glow — paper rubbed lightly clean behind the letters */
+  text-shadow:0 0 12px rgba(247,240,223,0.5), 0 0 22px rgba(247,240,223,0.32);
+}
+.wordmark .dot{ opacity:.5; padding:0 .12em; }
+nav.menu{ pointer-events:auto; }
+nav.menu ul{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:nowrap; gap:clamp(12px,1.5vw,28px); justify-content:flex-end; }
+nav.menu li{ white-space:nowrap; }
+nav.menu a{
+  font-family:var(--serif); font-weight:500; font-size:clamp(11px,0.92vw,14px); letter-spacing:0.13em; text-transform:uppercase;
+  color:#453a28; text-decoration:none; padding-bottom:4px; position:relative; transition:color .35s ease; white-space:nowrap;
+  text-shadow:0 0 11px rgba(247,240,223,0.42), 0 0 18px rgba(247,240,223,0.26);
+}
+/* faint always-on hairline so the nav reads as intentional */
+nav.menu a::before{ content:""; position:absolute; left:0; right:0; bottom:0; height:1px; background:currentColor; opacity:0.16; }
+/* stronger underline that draws in on hover / active */
+nav.menu a::after{ content:""; position:absolute; left:0; right:100%; bottom:0; height:1px; background:var(--ink); transition:right .42s cubic-bezier(.2,.7,.2,1); }
+nav.menu a:hover,nav.menu a.active{ color:var(--ink); }
+nav.menu a:hover::after,nav.menu a.active::after{ right:0; }
+nav.menu a.active::after{ height:1.5px; }
+/* barely-there ivory veil calming the paper just behind the logo + nav (not a strip) */
+.header-veil{
+  position:fixed; top:0; left:0; right:0; height:118px; z-index:7; pointer-events:none;
+  background:
+    radial-gradient(230px 88px at 11% 40px, rgba(246,239,222,0.17), transparent 72%),
+    radial-gradient(560px 92px at 80% 40px, rgba(246,239,222,0.15), transparent 74%);
+}
+
+/* ---------------- Scene ---------------- */
+.scene{ position:fixed; inset:0; z-index:2; }
+.stage{
+  position:absolute; left:50%; top:50%;
+  width:1500px; height:1000px;
+  transform:translate(-50%,-50%) scale(var(--scale,1)) translate(var(--px,0px),var(--py,0px));
+  transform-origin:center center;
+}
+
+/* a scrap = paper shape (filtered) + handwriting (crisp) */
+.scrap{
+  position:absolute; left:var(--x); top:var(--y);
+  width:var(--w); height:var(--h);
+  transform:translate(-50%,-50%) rotate(var(--rot,0deg)) translateY(var(--lift,0px));
+  transition:transform .45s cubic-bezier(.2,.7,.2,1);
+  cursor:pointer;
+}
+.scrap.no-int{ cursor:default; pointer-events:none; }
+
+.paper{
+  position:absolute; inset:0;
+  /* flatter, evenly-toned cream with low-contrast irregular mottling (no CG spotlight) */
+  background:
+    radial-gradient(130% 120% at 64% 74%, rgba(118,92,52,0.06), transparent 58%),
+    radial-gradient(120% 105% at 30% 26%, #ece2cb 0%, #e7ddc2 60%, #e2d8bb 100%);
+  box-shadow:inset 0 0 10px rgba(110,84,46,0.13);
+}
+/* aging blotches + heavy fibrous paper grain (displaced with the paper) */
+.paper::after{
+  content:""; position:absolute; inset:0; mix-blend-mode:multiply; opacity:1;
+  background:
+    radial-gradient(closest-side at 78% 18%, rgba(120,88,46,0.16), transparent 62%),
+    radial-gradient(closest-side at 16% 82%, rgba(120,88,46,0.12), transparent 58%),
+    radial-gradient(closest-side at 60% 92%, rgba(96,70,38,0.13), transparent 62%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1 0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.6'/%3E%3C/svg%3E");
+  background-size:auto,auto,auto,130px 130px;
+}
+/* a second, coarser speckle for tactile paper fibre */
+.paper::before{ content:""; position:absolute; inset:0; z-index:1; mix-blend-mode:overlay; opacity:.5; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='pb'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pb)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size:120px 120px; }
+/* edge treatments via SVG displacement (torn / deckle / clean) + matching shadow */
+.edge-deckle .paper{ filter:url(#deckle); border-radius:3px; }
+.edge-ripped .paper{ filter:url(#ripped); border-radius:2px; }
+.edge-soft   .paper{ filter:url(#soft);   border-radius:5px; }
+.edge-card   .paper{ filter:url(#soft);   border-radius:7px; }
+
+/* paper varieties (rules/grids drawn into the shape so they age + tear with it) */
+.lined .paper{ background-image:
+    repeating-linear-gradient(0deg,transparent 0 calc(var(--rule,22px) - 1px),rgba(96,104,116,0.26) var(--rule,22px)),
+    radial-gradient(120% 105% at 30% 26%, #ece3cd 0%, #e7ddc1 60%, #e1d7ba 100%);
+  background-position:0 calc(var(--rule,22px) + 6px),0 0;
+}
+.kraft .paper{ background:
+    radial-gradient(130% 120% at 60% 72%, rgba(96,68,34,0.06), transparent 60%),
+    radial-gradient(120% 105% at 38% 28%, #cdbc97 0%, #c2af86 58%, #b6a276 100%);
+  box-shadow:inset 0 0 12px rgba(80,54,24,0.18);
+}
+.graph .paper{ background-image:
+    repeating-linear-gradient(0deg,transparent 0 17px,rgba(110,96,70,0.17) 17px 17.7px),
+    repeating-linear-gradient(90deg,transparent 0 17px,rgba(110,96,70,0.17) 17px 17.7px),
+    radial-gradient(120% 105% at 38% 28%, #ebe2cc, #e3d9bd 65%, #ddd3b6 100%);
+}
+.notebook .paper{ background-image:
+    repeating-linear-gradient(0deg,transparent 0 31px,rgba(120,110,88,0.24) 31px 32px),
+    linear-gradient(90deg,transparent 0 8%, rgba(168,86,68,0.5) 8% calc(8% + 1.5px), transparent calc(8% + 1.5px)),
+    radial-gradient(120% 105% at 34% 28%, #ece3cd, #e6dcc0 62%, #e0d6ba 100%);
+  background-position:0 26px,0 0,0 0;
+}
+
+/* spiral punch holes down the torn left edge of the notebook page */
+.holes-left{ position:absolute; left:5.2%; top:8%; bottom:8%; width:18px; display:flex; flex-direction:column; justify-content:space-between; z-index:3; }
+.holes-left i{ width:15px; height:15px; border-radius:50%;
+  background:radial-gradient(circle at 40% 35%, #b8a684, #cdbf9d);
+  box-shadow:inset 1px 1px 2px rgba(60,44,22,0.5), 0 1px 0 rgba(255,250,235,.35); }
+/* punch holes along a top edge */
+.holes-top{ position:absolute; top:7%; left:14%; right:14%; height:14px; display:flex; justify-content:space-between; z-index:3; }
+.holes-top i{ width:13px; height:13px; border-radius:50%;
+  background:radial-gradient(circle at 40% 35%, #b3a07e, #c9bb98);
+  box-shadow:inset 1px 1px 2px rgba(60,44,22,0.5); }
+
+/* a strip of aged masking tape */
+.tape{ position:absolute; z-index:4; width:74px; height:36px;
+  background:linear-gradient(180deg, rgba(214,196,158,0.78), rgba(196,176,136,0.7));
+  filter:url(#soft);
+  mix-blend-mode:multiply; opacity:.82;
+  box-shadow:0 2px 5px rgba(60,44,22,0.22);
+}
+.tape::after{ content:""; position:absolute; inset:0; opacity:.4; mix-blend-mode:multiply;
+  background:repeating-linear-gradient(90deg, transparent 0 5px, rgba(110,90,60,.25) 5px 6px); }
+
+/* burlap backing behind one note */
+.fabric{ position:absolute; z-index:0; filter:url(#ripped);
+  background:
+    repeating-linear-gradient(0deg, rgba(150,132,98,.9) 0 3px, rgba(120,104,74,.9) 3px 6px),
+    repeating-linear-gradient(90deg, rgba(150,132,98,.55) 0 3px, rgba(120,104,74,.55) 3px 6px);
+  box-shadow:0 6px 14px rgba(50,36,18,0.4);
+}
+
+/* ---------------- real scanned-paper notes (transparent PNG, torn edge intact) */
+.paper-img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:fill; display:block;
+  filter:drop-shadow(2px 7px 7px rgba(40,28,12,0.42));
+  pointer-events:none; -webkit-user-drag:none; user-select:none;
+}
+.paper-img.flip{ transform:scaleX(-1); }
+/* a touch of warm unifying tint so scans sit in the same light as the desk */
+.img-note::after{
+  content:""; position:absolute; inset:0; z-index:2; pointer-events:none; mix-blend-mode:multiply; opacity:.14;
+  background:radial-gradient(120% 100% at 60% 80%, rgba(120,90,50,0.5), transparent 70%);
+}
+/* flat: scan already carries its own shadow/shading — sit it dead flat on the desk */
+.img-note.flat .paper-img{ filter:none; }
+.img-note.flat::after{ display:none; }
+
+/* envelope: darken + reveal "Contact" on hover (same treatment as the photo) */
+.envelope-note{
+  position:absolute; left:var(--x); top:var(--y); width:var(--w); height:var(--h);
+  transform:translate(-50%,-50%) rotate(var(--rot,0deg)); cursor:pointer;
+}
+.envelope-note .env-closed{
+  position:absolute; left:0; right:0; bottom:0; width:100%; height:auto;
+  filter:saturate(0.8) brightness(0.86) drop-shadow(2px 5px 6px rgba(40,28,12,0.34));
+  pointer-events:none; -webkit-user-drag:none; user-select:none; transition:filter .45s ease;
+}
+.envelope-note:hover .env-closed,.envelope-note:focus-within .env-closed{
+  filter:saturate(0.7) brightness(0.46) drop-shadow(2px 5px 6px rgba(40,28,12,0.34));
+}
+.envelope-note .env-label{
+  position:absolute; inset:0; z-index:3; display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); color:#fff; text-transform:uppercase; letter-spacing:0.12em;
+  font-size:14px; opacity:0; transition:opacity .45s ease; pointer-events:none; white-space:nowrap;
+  text-shadow:0 1px 4px rgba(0,0,0,0.6); transform:rotate(7deg);
+}
+.envelope-note:hover .env-label,.envelope-note:focus-within .env-label{ opacity:1; }
+
+/* photo: darken + section label fade in/out on hover (menu font + colour) */
+.photo-note .photo-dark{
+  position:absolute; inset:0; z-index:2; pointer-events:none; border-radius:7px;
+  background:rgba(28,20,10,0.46); opacity:0; transition:opacity .45s ease;
+}
+.photo-note:hover .photo-dark{ opacity:1; }
+.photo-note .photo-label{
+  position:absolute; inset:0; z-index:3; display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); color:#efe6d2; text-transform:uppercase; letter-spacing:0.18em;
+  font-size:21px; opacity:0; transition:opacity .45s ease; pointer-events:none;
+  text-shadow:0 1px 10px rgba(20,14,6,0.7);
+}
+.photo-note:hover .photo-label{ opacity:1; }
+
+/* ---------------- Handwriting (crisp, on top of the paper) */
+.hw{ position:absolute; left:8%; right:8%; top:var(--ty,42%); display:flex; flex-direction:column; gap:var(--lg,4px); pointer-events:none; }
+.ln{ display:flex; align-items:baseline; justify-content:center; white-space:nowrap; }
+.mark{ display:inline-block; width:0; height:1em; }
+.ink{
+  font-family:var(--hw-font); font-weight:400; color:var(--ink);
+  line-height:1.05; font-size:var(--fs,30px); white-space:nowrap;
+  clip-path:inset(-16% 100% -55% 0); filter:url(#inkrough); will-change:clip-path;
+}
+.ink.dash{ font-size:calc(var(--fs,30px) * .9); letter-spacing:-.04em; color:var(--ink-soft); }
+.reduced .ink{ clip-path:none !important; }
+/* near/far depth: distant scraps a touch cooler/softer, the hero crisp + warm (critique #6) */
+.scrap.far{ filter:saturate(.94) brightness(1.015); }
+.scrap.near .paper{ box-shadow:inset 0 0 22px rgba(96,68,36,0.30), inset 0 0 4px rgba(96,68,36,0.25), 0 0 0 rgba(0,0,0,0); }
+.scrap.hero{ filter:contrast(1.03) saturate(1.04); }
+/* handwriting variation — a few authored “hands” (critique #11) */
+.hw{ transform:rotate(var(--htilt,0deg)); transform-origin:center top; }
+.hand-rush .ink{ font-style:normal; letter-spacing:.012em; }
+.hand-rush .ln{ transform:rotate(-1.4deg); }
+.hand-small .ink{ font-size:calc(var(--fs,30px) * .9); opacity:.92; }
+.hand-neat .ln{ transform:rotate(.4deg); }
+
+/* ---------------- Pen ---------------- */
+#pen{ position:fixed; top:0; left:0; z-index:7; width:66px; height:auto; pointer-events:none;
+  filter:drop-shadow(3px 7px 6px rgba(40,28,12,0.30)); will-change:transform; }
+.reduced #pen{ display:none; }
+
+/* ---------------- Decorative: paper clip, flowers, library card, ink blot ---- */
+.clip{ position:absolute; z-index:5; width:34px; height:96px; }
+.flowers{ position:absolute; z-index:1; pointer-events:none; }
+.blot{ position:absolute; z-index:1; pointer-events:none; filter:url(#ripped);
+  background:radial-gradient(closest-side at 42% 40%, rgba(52,48,66,0.62), rgba(52,48,66,0.30) 55%, transparent 75%); border-radius:50%; }
+.blot::after{ content:""; position:absolute; width:26%; height:26%; right:-6%; bottom:6%; border-radius:50%;
+  background:radial-gradient(closest-side, rgba(52,48,66,0.5), transparent 70%); }
+
+/* library card */
+.card .paper{ background:
+    radial-gradient(120% 100% at 40% 24%, #d8c193, #c8ad77 60%, #b6995e 100%);
+  box-shadow:inset 0 0 22px rgba(80,54,24,0.4); }
+.card-print{ position:absolute; inset:0; z-index:3; padding:13% 11% 26%; pointer-events:none;
+  font-family:var(--serif); color:var(--label); }
+.card-print .row{ border-top:1px solid rgba(90,70,42,0.5); display:flex; margin-top:4px; }
+.card-print .lab{ font-size:8px; letter-spacing:.14em; text-transform:uppercase; padding:3px 6px 3px 0; opacity:.85; }
+.card-print .lab.sub{ border-left:1px solid rgba(90,70,42,0.5); padding-left:6px; }
+.card-print .top{ font-size:8px; letter-spacing:.16em; text-transform:uppercase; padding-bottom:2px; }
+.card-hand{ font-family:var(--hw-font); color:#3a3022; }
+.card-name{ font-size:19px; padding:1px 0 6px; }
+.card-note{ font-size:19px; line-height:1.08; padding-top:8px; }
+.card-date{ font-family:var(--hw-font); color:var(--stamp); font-size:17px; letter-spacing:.02em; white-space:nowrap; position:absolute; left:0; right:0; bottom:7%; text-align:center; }
+
+/* ---------------- Tagline / enter (lives inside the scaled stage, under the hero) -------- */
+.lede{ position:absolute; left:760px; top:813px; width:760px; transform:translateX(-50%); z-index:6; text-align:center; pointer-events:none;
+  opacity:1; }
+.lede.show{ opacity:1; }
+.lede p{ font-family:var(--serif); font-size:25px; color:#3a3024; margin:0 0 13px; line-height:1.4; }
+.lede .enter{ font-size:13px; letter-spacing:.32em; text-transform:uppercase; color:var(--ink-soft); pointer-events:auto;
+  text-decoration:none; display:inline-flex; flex-direction:column; align-items:center; gap:5px; }
+.lede .enter .bar{ width:70px; height:1px; background:rgba(70,58,40,.5); margin-bottom:7px; }
+.lede .enter .arr{ font-size:16px; animation:bob 2.4s ease-in-out infinite; }
+@keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(4px); } }
+
+/* ---------------- overlay (click a scrap / nav) ---------------- */
+.overlay{ position:fixed; inset:0; z-index:12; display:flex; align-items:center; justify-content:center;
+  opacity:0; visibility:hidden; background:rgba(34,26,16,0); backdrop-filter:blur(0); transition:opacity .5s, visibility .5s, background .5s, backdrop-filter .5s; }
+.overlay.open{ opacity:1; visibility:visible; background:rgba(34,26,16,0.5); backdrop-filter:blur(3px); }
+.panel{ position:relative; width:min(640px,86vw); padding:clamp(34px,5vw,62px);
+  background:linear-gradient(180deg,#ece0c6,#e2d4b6); border:1px solid rgba(120,98,62,0.4);
+  box-shadow:0 40px 90px rgba(30,20,8,.5); transform:translateY(18px) scale(.98); transition:transform .5s cubic-bezier(.2,.7,.2,1); }
+.overlay.open .panel{ transform:none; }
+.panel .eyebrow{ font-size:12px; letter-spacing:.3em; text-transform:uppercase; color:var(--ink-soft); }
+.panel h2{ font-family:var(--serif); font-weight:500; font-size:clamp(32px,5vw,50px); margin:.16em 0 .3em; }
+.panel .epi{ font-family:var(--hw-font); font-size:clamp(26px,3.4vw,38px); margin:0 0 .5em; }
+.panel p{ font-size:clamp(15px,1.4vw,18px); line-height:1.7; color:var(--ink-soft); max-width:46ch; }
+.panel .rule{ width:44px; height:1px; background:var(--ink); margin:16px 0; opacity:.5; }
+.panel .close{ position:absolute; top:16px; right:20px; width:34px; height:34px; border:none; background:none; cursor:pointer; font:26px/1 var(--serif); color:var(--ink-soft); }
+.panel .close:hover{ color:var(--ink); }
+
+.vh{ position:absolute!important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0; }
+
+@media (max-width:720px){
+  .topbar{ flex-direction:column; gap:12px; align-items:flex-start; }
+  nav.menu ul{ gap:11px; }
+  .lede{ bottom:18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- SVG filters: paper edges, ink roughening, pen roughening -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <filter id="deckle" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.016 0.022" numOctaves="3" seed="11" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="9" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feDropShadow dx="1" dy="3" stdDeviation="3.5" flood-color="rgba(48,34,16,0.42)"/>
+    </filter>
+    <filter id="ripped" x="-14%" y="-14%" width="128%" height="128%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.028 0.04" numOctaves="3" seed="5" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="14" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feDropShadow dx="1" dy="4" stdDeviation="4.5" flood-color="rgba(48,34,16,0.42)"/>
+    </filter>
+    <filter id="soft" x="-14%" y="-14%" width="128%" height="128%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03 0.05" numOctaves="2" seed="3" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="3.2" xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feDropShadow dx="1" dy="2.5" stdDeviation="3" flood-color="rgba(48,34,16,0.38)"/>
+    </filter>
+    <filter id="inkrough" x="-12%" y="-30%" width="124%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="4" result="coarse"/>
+      <feDisplacementMap in="SourceGraphic" in2="coarse" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d1"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.09 0.12" numOctaves="2" seed="7" result="fine"/>
+      <feDisplacementMap in="d1" in2="fine" scale="1.0" xChannelSelector="R" yChannelSelector="G" result="d2"/>
+      <feTurbulence type="turbulence" baseFrequency="0.34 0.5" numOctaves="1" seed="13" result="sp"/>
+      <feColorMatrix in="sp" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 7 -5.2" result="spm"/>
+      <feComponentTransfer in="spm" result="gaps"><feFuncA type="discrete" tableValues="0 0 0 0.5 0.65"/></feComponentTransfer>
+      <feComposite in="d2" in2="gaps" operator="out" result="dry"/>
+      <feGaussianBlur in="dry" stdDeviation="0.4" result="bleed"/>
+      <feMerge><feMergeNode in="bleed"/><feMergeNode in="dry"/></feMerge>
+    </filter>
+    <filter id="penrough" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03 0.05" numOctaves="2" seed="9" result="pn"/>
+      <feDisplacementMap in="SourceGraphic" in2="pn" scale="1.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <a class="wordmark" href="#" data-nav="Home" aria-label="Maurice Brand, home">Maurice<span class="dot">·</span>Brand</a>
+  <nav class="menu" aria-label="Primary">
+    <ul>
+      <li><a href="#home" class="active" data-nav="Home">Home</a></li>
+      <li><a href="#novels" data-nav="Novels">Novels</a></li>
+      <li><a href="#short-stories" data-nav="Short Stories">Short Stories</a></li>
+      <li><a href="#biography" data-nav="Biography">Biography</a></li>
+      <li><a href="#inspiration" data-nav="Inspiration">Inspiration</a></li>
+      <li><a href="#contact" data-nav="Contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="scene" aria-label="Writing desk">
+  <p class="vh">Maurice Brand — writer of literary fantasy and mythic fiction. Loose papers
+  on a desk, each bearing a handwritten fragment: between two silences; what the water keeps;
+  the hour before the hour; north of the known; ink dries, the page stays; the body keeps its
+  own time; and at the centre — stories are the things we carry across the dark so we do not
+  lose ourselves.</p>
+  <div class="stage" id="stage" aria-hidden="true"></div>
+</main>
+
+<!-- worn fountain pen -->
+<svg id="pen" viewBox="0 0 160 520" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g filter="url(#penrough)">
+    <path d="M61 44 C61 30 99 30 99 44 L97 296 C97 306 63 306 63 296 Z" fill="#2a2622"/>
+    <path d="M66 46 C66 38 84 38 84 46 L83 292 L70 292 Z" fill="#40392f" opacity="0.5"/>
+    <rect x="61" y="150" width="38" height="9" rx="2" fill="#b9a06a"/>
+    <rect x="61" y="172" width="38" height="4" rx="2" fill="#9c854f" opacity="0.8"/>
+    <path d="M63 296 L97 296 L92 360 C92 368 68 368 68 360 Z" fill="#1f1c19"/>
+    <path d="M70 360 L90 360 L84 452 C84 466 76 470 80 472 C84 470 76 466 76 452 Z" fill="#c9b27a"/>
+    <path d="M73 362 L87 362 L82 448 L78 448 Z" fill="#a98f52"/>
+    <line x1="80" y1="372" x2="80" y2="456" stroke="#5e4f2c" stroke-width="1.4"/>
+    <circle cx="80" cy="386" r="3.4" fill="#4a3d20"/>
+    <path d="M77 452 L83 452 L80.5 470 C80.5 476 79.5 476 79.5 470 Z" fill="#1b1c22"/>
+    <circle cx="80" cy="469" r="4.6" fill="#16171d"/>
+    <path d="M80 473 q3 6 0.6 12 q-2.2 -5 -0.6 -12 Z" fill="#16171d" opacity="0.7"/>
+  </g>
+</svg>
+
+<div class="lede" id="lede">
+  <p>Literary fiction, psychological surrealism,<br />and stories of grief, identity, and the difficult work of becoming.</p>
+  <a class="enter" href="#novels" data-nav="Novels"><span class="bar"></span>Enter the stories<span class="arr">↓</span></a>
+</div>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="ov-title">
+  <div class="panel">
+    <button class="close" id="ov-close" aria-label="Close">×</button>
+    <div class="eyebrow">Maurice Brand</div>
+    <h2 id="ov-title">Home</h2>
+    <div class="rule"></div>
+    <p class="epi" id="ov-epi"></p>
+    <p id="ov-body"></p>
+  </div>
+</div>
+
+<div class="desk-stains"></div>
+<div class="desk-grain"></div>
+<div class="header-veil"></div>
+<div class="photo-grain"></div>
+<div class="photo-grain fine"></div>
+<div class="photo-grain coarse"></div>
+<div class="vignette"></div>
+
+<script>
+/* =========================================================================
+   KNOBS
+   ========================================================================= */
+const CONFIG = {
+  writeIntervalMs : 500,    // pause after each scrap before the next begins
+  baseWriteMs     : 360,
+  perCharMs       : 26,     // write speed scales with phrase length
+  flightMs        : 850,
+  lineFlightMs    : 520,    // quicker reposition between lines of one note
+  flightArcPx     : 64,
+  penHoldDeg      : 32,
+  penRefLen       : 210,
+  penScaleMin     : 0.55, penScaleMax : 1.5,
+  parallaxPx      : 14,
+  /* every scrap: paper style, placement in the 1500x1000 stage, tilt, phrase(s) */
+  notes: [
+    { nav:'Short Stories', z:6, img:'topleft-pair.png', x:'264px', y:'312px', w:'474px', h:'351px', rot:'-1deg',
+      fs:'30px', lg:'2px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(30% + 3px);right:calc(6% - 3px);top:12%;', extra:'near', hand:'hand-neat', htilt:'-3deg',
+      lines:[ {t:"Three cars sit in the lot"}, {t:"beneath lights that bloom"}, {t:"like dandelions"}, {t:"before they come apart"}, {t:"in the wind."} ] },
+
+    { nav:'Biography', z:7, img:'paper-lined.png', x:'662px', y:'306px', w:'286px', h:'206px', rot:'2deg',
+      ty:'36%', fs:'33px', lg:'3px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(8% - 5px);right:calc(8% + 5px);top:calc(36% - 10px);', extra:'far', hand:'hand-small', htilt:'-5deg',
+      lines:[ {t:"The cold had moved"}, {t:"to my teeth."} ] },
+
+    { nav:'Inspiration', z:6, img:'paper-lined2.png', x:'938px', y:'346px', w:'288px', h:'187px', rot:'2deg',
+      ty:'13%', fs:'26px', lg:'3px', font:"'Reenie Beanie', cursive", hwStyle:'top:calc(13% + 7px);', extra:'far', hand:'hand-rush', htilt:'0deg',
+      lines:[ {t:"They held news."}, {t:"I held a kitchen towel."} ] },
+
+    { nav:'Novels', z:8, img:'paper-taped.png', x:'1210px', y:'222px', w:'296px', h:'214px', rot:'-3deg',
+      ty:'38%', fs:'25px', lg:'2px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(7% + 3px);right:calc(9% - 3px);', extra:'far', hand:'hand-rush', htilt:'-1deg',
+      lines:[ {t:"Thanks, I said, but"}, {t:"I don't do neighboring."} ] },
+
+    { nav:'Short Stories', z:8, img:'paper-fabric.png', flat:true, imgFilter:'drop-shadow(0px 14px 20px rgba(38,26,12,0.21))', x:'278px', y:'770px', w:'380px', h:'289px', rot:'-1deg',
+      ty:'32%', fs:'26px', lg:'3px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(1% + 20px);right:calc(17% - 20px);', extra:'near', hand:'hand-rush', htilt:'-8deg',
+      lines:[ {t:"Morning reduced"}, {t:"some of the distances"}, {t:"in the kitchen."} ] },
+
+    /* centre — the finale (the dominant sheet; never shrunk) — real spiral-torn page */
+    { nav:'Home', z:9, img:'paper-center.png', x:'766px', y:'562px', w:'552px', h:'400px', rot:'-1deg',
+      ty:'12%', fs:'33px', lg:'3px', font:"'Reenie Beanie', cursive", hero:true, extra:'hero', hand:'hand-neat', htilt:'-2deg',
+      lines:[ {t:"Somewhere, a tiger paces a"}, {t:"small enclosure, while elsewhere,"}, {t:"in a forest no one has ever"}, {t:"named, another tiger walks"}, {t:"freely and settles accounts"}, {t:"with boars and deer. One tiger"}, {t:"pays for the other,"}, {t:"and neither knows it."} ] },
+  ],
+};
+
+const SECTIONS = {
+  'Home':'The desk where the work begins — loose pages, an open hour, the patience of a slow hand.',
+  'Novels':'Long-form fiction written against the grain of the known. Three novels, with a fourth gathering at the edges.',
+  'Short Stories':'Fragments that hold their shape — brief, exact, complete. Collected and uncollected pieces.',
+  'Biography':'Maurice Brand writes in the hours before the hour, north of habit, keeping what the water keeps.',
+  'Inspiration':'Notebooks, marginalia, and the company of other writers — the reading that makes the writing possible.',
+  'Contact':'For correspondence, readings, and rights enquiries. A door left ajar.',
+};
+
+const stage = document.getElementById('stage');
+const pen   = document.getElementById('pen');
+const lede  = document.getElementById('lede');
+const overlay = document.getElementById('overlay');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---- decorative, non-written elements painted first (behind) ---- */
+function el(cls, css){ const d=document.createElement('div'); d.className=cls; if(css) d.style.cssText=css; return d; }
+
+// (bottom-left burlap is now part of the combined paper-fabric scan)
+
+// vintage airmail postcard behind "between two silences" — stays empty
+(function(){})();
+
+// envelope — darkens + reveals "Contact" on hover (like the photo); links to Contact
+(function(){
+  const s = el('scrap envelope-note', '--x:1238px;--y:524px;--w:112px;--h:92px;--rot:-4deg;z-index:6;');
+  s.dataset.nav='Contact';
+  const closed = document.createElement('img'); closed.className='env-closed'; closed.src='envelope-closed.png'; closed.alt='Contact'; closed.draggable=false;
+  const label = el('env-label'); label.textContent='Contact';
+  s.appendChild(closed); s.appendChild(label);
+  s.addEventListener('click', ()=>openSection('Contact','a door left ajar'));
+  stage.appendChild(s);
+})();
+
+// author photo (sepia, deckle-edged) — bottom right, darkens + reveals "Biography" on hover
+(function(){
+  const s = el('scrap img-note photo-note', '--x:1220px;--y:776px;--w:178px;--h:228px;--rot:2deg;z-index:8;');
+  s.dataset.nav='Biography';
+  const im = document.createElement('img'); im.className='paper-img'; im.src='author-photo.png'; im.alt='Maurice Brand'; im.draggable=false;
+  const dark = el('photo-dark');
+  const label = el('photo-label'); label.textContent='Biography';
+  s.appendChild(im); s.appendChild(dark); s.appendChild(label);
+  s.addEventListener('click', ()=>openSection('Biography','the writer at his desk'));
+  stage.appendChild(s);
+})();
+
+// ink blot removed per feedback (felt accidental)
+
+/* ---- build written scraps ---- */
+const noteEls = CONFIG.notes.map(n=>{
+  const cls = n.img
+    ? 'scrap img-note'+(n.flat?' flat':'')+(n.extra?' '+n.extra:'')+(n.hand?' '+n.hand:'')
+    : 'scrap '+n.paper+' '+n.edge+(n.extra?' '+n.extra:'')+(n.hand?' '+n.hand:'');
+  const s = el(cls, `--x:${n.x};--y:${n.y};--w:${n.w};--h:${n.h};--rot:${n.rot};z-index:${n.z};${n.rule?'--rule:'+n.rule+';':''}${n.htilt?'--htilt:'+n.htilt+';':''}`);
+  s.dataset.nav = n.nav;
+  if(n.img){
+    const im = document.createElement('img');
+    im.className = 'paper-img'+(n.flip?' flip':'');
+    im.src = n.img; im.alt=''; im.draggable=false;
+    if(n.imgFilter) im.style.filter = n.imgFilter;
+    s.appendChild(im);
+  } else {
+    s.appendChild(el('paper'));
+    if(n.holesLeft){ const h=el('holes-left'); for(let i=0;i<11;i++) h.appendChild(document.createElement('i')); s.appendChild(h); }
+    if(n.holesTop){ const h=el('holes-top'); for(let i=0;i<6;i++) h.appendChild(document.createElement('i')); s.appendChild(h); }
+  }
+  if(n.clip){ s.appendChild(penClip()); }
+  if(n.flowers){ s.appendChild(flowerSprig()); }
+
+  const hw = el('hw', `--ty:${n.ty};--fs:${n.fs};${n.lg?'--lg:'+n.lg+';':''}${n.font?'--hw-font:'+n.font+';':''}${n.hwStyle||''}`);
+  // text lines (no decorative dash)
+  const lines = n.lines.map(L=>({t:L.t, dash:false}));
+  const lineRefs = lines.map(L=>{
+    const row = el('ln');
+    row.innerHTML = `<span class="mark start"></span><span class="ink${L.dash?' dash':''}">${L.t}</span><span class="mark end"></span>`;
+    hw.appendChild(row);
+    return { ink:row.querySelector('.ink'), start:row.querySelector('.start'), end:row.querySelector('.end') };
+  });
+  s.appendChild(hw);
+  stage.appendChild(s);
+  return { s, lines:lineRefs, cfg:n };
+});
+
+function penClip(){
+  const ns='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(ns,'svg');
+  svg.setAttribute('class','clip'); svg.setAttribute('viewBox','0 0 40 120');
+  svg.style.cssText='right:14%;top:-22px;transform:rotate(12deg);';
+  svg.innerHTML='<path d="M20 8 C9 8 9 26 20 26 C31 26 31 14 22 14 L22 100" fill="none" stroke="#9b9384" stroke-width="5" stroke-linecap="round"/><path d="M20 8 C9 8 9 26 20 26 C31 26 31 14 22 14 L22 100" fill="none" stroke="#cfc9bd" stroke-width="2" stroke-linecap="round"/>';
+  return svg;
+}
+function flowerSprig(){
+  const ns='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(ns,'svg');
+  svg.setAttribute('class','flowers'); svg.setAttribute('viewBox','0 0 140 220');
+  svg.style.cssText='right:-86px;top:30%;width:130px;height:auto;opacity:.92;';
+  let s='<g stroke="#8a7350" stroke-width="2" fill="none" stroke-linecap="round">';
+  s+='<path d="M20 10 C50 70 70 130 60 210"/>';
+  const buds=[[30,52],[44,86],[54,120],[58,152],[58,184],[24,40],[40,70],[66,108],[70,150]];
+  for(const [x,y] of buds) s+=`<path d="M${x} ${y} l14 -8"/><path d="M${x} ${y} l16 4"/>`;
+  s+='</g><g fill="#7d6647">';
+  for(const [x,y] of buds){ s+=`<ellipse cx="${x+15}" cy="${y-7}" rx="4.4" ry="2.4" transform="rotate(-26 ${x+15} ${y-7})"/>`; s+=`<ellipse cx="${x+17}" cy="${y+5}" rx="4.6" ry="2.4" transform="rotate(14 ${x+17} ${y+5})"/>`; }
+  s+='</g>';
+  svg.innerHTML=s; return svg;
+}
+
+/* ---- responsive scaling (guarded against 0-dimension load races) ---- */
+function fit(){
+  const w=window.innerWidth||document.documentElement.clientWidth||0;
+  const h=window.innerHeight||document.documentElement.clientHeight||0;
+  if(w<2||h<2) return;                       // layout not ready — don't apply a 0 scale
+  const sc=Math.min(w/1500, h/1000)*0.98;
+  if(sc>0) stage.style.setProperty('--scale', sc.toFixed(4));
+}
+fit();
+window.addEventListener('resize', fit);
+window.addEventListener('load', fit);
+requestAnimationFrame(fit);                    // re-run after first paint
+if(window.ResizeObserver){ new ResizeObserver(fit).observe(document.documentElement); }
+
+/* ---- pen geometry ---- */
+const PW=66, PH=PW*520/160;
+const NIB={ x:80/160*PW, y:472/520*PH };
+function setPen(x,y,scale,ang){ pen.style.transformOrigin=`${NIB.x}px ${NIB.y}px`; pen.style.transform=`translate(${x-NIB.x}px,${y-NIB.y}px) rotate(${ang}deg) scale(${scale})`; }
+function markerPos(elm){ const r=elm.getBoundingClientRect(); return {x:r.left+r.width/2, y:r.top+r.height/2}; }
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+function baseline(line){
+  const a=markerPos(line.start), b=markerPos(line.end);
+  const ang=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI;
+  const len=Math.hypot(b.x-a.x,b.y-a.y);
+  return { a,b,ang, scale:clamp(len/CONFIG.penRefLen, CONFIG.penScaleMin, CONFIG.penScaleMax) };
+}
+function animate(dur,onFrame,ease){ ease=ease||(t=>t); return new Promise(res=>{ const t0=performance.now(); requestAnimationFrame(function f(now){ const p=Math.min(1,(now-t0)/dur); onFrame(ease(p),p); if(p<1) requestAnimationFrame(f); else res(); }); }); }
+const easeInOut=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+let last={ x:window.innerWidth*0.5, y:-140, scale:.8, ang:CONFIG.penHoldDeg };
+
+function flightTo(line,dur){
+  const start={...last};
+  return animate(dur, e=>{
+    const bl=baseline(line);
+    const tAng=bl.ang+CONFIG.penHoldDeg;
+    const lift=Math.sin(e*Math.PI)*CONFIG.flightArcPx;
+    setPen(lerp(start.x,bl.a.x,e), lerp(start.y,bl.a.y,e)-lift, lerp(start.scale,bl.scale,e), lerp(start.ang,tAng,e));
+    if(e===1) last={ x:bl.a.x, y:bl.a.y, scale:bl.scale, ang:tAng };
+  }, easeInOut);
+}
+function writeOn(line,text){
+  const dur=CONFIG.baseWriteMs + text.length*CONFIG.perCharMs;
+  return animate(dur, e=>{
+    const bl=baseline(line);
+    setPen(lerp(bl.a.x,bl.b.x,e), lerp(bl.a.y,bl.b.y,e), bl.scale, bl.ang+CONFIG.penHoldDeg);
+    line.ink.style.clipPath=`inset(-16% ${((1-e)*100).toFixed(2)}% -55% 0)`;
+    if(e===1) last={ x:bl.b.x, y:bl.b.y, scale:bl.scale, ang:bl.ang+CONFIG.penHoldDeg };
+  });
+}
+
+async function run(){
+  await wait(450);
+  for(let i=0;i<noteEls.length;i++){
+    const note=noteEls[i];
+    note.lines.forEach(l=>l.ink.style.clipPath='inset(-16% 100% -55% 0)');
+    for(let j=0;j<note.lines.length;j++){
+      const txt=(j<note.cfg.lines.length)?note.cfg.lines[j].t:'—';
+      await flightTo(note.lines[j], j===0?CONFIG.flightMs:CONFIG.lineFlightMs);
+      await writeOn(note.lines[j], txt);
+    }
+    if(i<noteEls.length-1) await wait(CONFIG.writeIntervalMs);
+  }
+  // pen lifts away and rests off-scene; the lede settles in
+  await animate(950, e=>{ setPen(last.x, lerp(last.y, window.innerHeight+180, e), lerp(last.scale,.75,e), last.ang); }, easeInOut);
+  pen.style.display='none';
+  lede.classList.add('show');
+}
+
+if(reduceMotion){ document.body.classList.add('reduced'); lede.classList.add('show'); }
+else (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>{ fit(); run(); });
+
+/* tagline is part of the composition — move it inside the scaled stage */
+stage.appendChild(lede);
+
+/* ---- parallax ---- */
+let px=0,py=0,tpx=0,tpy=0;
+window.addEventListener('mousemove',e=>{ tpx=-(e.clientX/innerWidth-.5)*CONFIG.parallaxPx; tpy=-(e.clientY/innerHeight-.5)*CONFIG.parallaxPx; });
+(function par(){ px+=(tpx-px)*.07; py+=(tpy-py)*.07; stage.style.setProperty('--px',px.toFixed(2)+'px'); stage.style.setProperty('--py',py.toFixed(2)+'px'); requestAnimationFrame(par); })();
+
+/* ---- hover lift + click ---- */
+noteEls.forEach(n=>{
+  n.s.addEventListener('pointerenter',()=>n.s.style.setProperty('--lift','-10px'));
+  n.s.addEventListener('pointerleave',()=>n.s.style.setProperty('--lift','0px'));
+  n.s.addEventListener('click',()=>openSection(n.cfg.nav, n.cfg.lines.map(l=>l.t).join(' ')));
+});
+
+/* ---- overlay ---- */
+function openSection(nav,phrase){
+  document.getElementById('ov-title').textContent=nav;
+  document.getElementById('ov-epi').textContent=phrase?'“'+phrase+'”':'';
+  document.getElementById('ov-body').textContent=SECTIONS[nav]||'';
+  overlay.classList.add('open');
+  document.querySelectorAll('nav.menu a').forEach(a=>a.classList.toggle('active', a.dataset.nav===nav));
+}
+const closeOverlay=()=>overlay.classList.remove('open');
+document.getElementById('ov-close').addEventListener('click',closeOverlay);
+overlay.addEventListener('click',e=>{ if(e.target===overlay) closeOverlay(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeOverlay(); });
+document.querySelectorAll('[data-nav]').forEach(a=>{ if(a.tagName==='A'){ a.addEventListener('click',e=>{ e.preventDefault(); openSection(a.dataset.nav,''); }); } });
+</script>
+</body>
+</html>
