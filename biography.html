@@ -6,7 +6,7 @@
 <title>Maurice Brand — Biography</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
 <style>
 /* ============================================================
    MAURICE BRAND — BIOGRAPHY
@@ -21,6 +21,7 @@
   --ink:#2c2620;
   --ink-soft:#544a3b;
   --serif:"EB Garamond",Georgia,"Times New Roman",serif;
+  --engrave:"Cinzel",Georgia,serif;
 }
 *{ box-sizing:border-box; }
 a,button{ touch-action:manipulation; -webkit-tap-highlight-color:rgba(0,0,0,0); }
@@ -83,8 +84,8 @@ nav.menu a.active::after{ height:1.5px; }
 
 .page-title{ text-align:center; margin:0 0 clamp(40px,6vh,64px); }
 .page-title h1{
-  font-family:var(--serif); font-weight:500; margin:0;
-  font-size:clamp(34px,5vw,60px); letter-spacing:0.16em; text-transform:uppercase;
+  font-family:var(--engrave); font-weight:500; margin:0;
+  font-size:clamp(34px,5.2vw,62px); letter-spacing:0.12em; text-transform:uppercase;
   color:#2c2519;
   text-shadow:0 0 16px rgba(247,240,223,0.45);
 }
@@ -211,26 +212,26 @@ nav.menu a.active::after{ height:1.5px; }
 <body>
 
 <header class="topbar">
-  <a class="wordmark" href="index.html" aria-label="Maurice Brand, home">Maurice<span class="dot">·</span>Brand</a>
+  <a class="wordmark" href="/" aria-label="Maurice Brand, home">Maurice<span class="dot">·</span>Brand</a>
   <nav class="menu" aria-label="Primary">
     <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="novels.html">Novels</a></li>
-      <li><a href="short-stories.html">Short Stories</a></li>
-      <li><a href="biography.html" class="active">Biography</a></li>
-      <li><a href="inspiration.html">Inspiration</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/novels">Novels</a></li>
+      <li><a href="/short-stories">Short Stories</a></li>
+      <li><a href="/biography" class="active">Biography</a></li>
+      <li><a href="/inspiration">Inspiration</a></li>
+      <li><a href="/contact">Contact</a></li>
     </ul>
   </nav>
   <button class="m-burger" id="m-burger" aria-label="Open menu" aria-expanded="false" aria-controls="m-nav"><span></span><span></span><span></span></button>
 </header>
 <nav class="m-nav" id="m-nav" aria-label="Primary">
-    <a href="index.html" style="--d:.06s">Home</a>
-    <a href="novels.html" style="--d:.12s">Novels</a>
-    <a href="short-stories.html" style="--d:.18s">Short Stories</a>
-    <a href="biography.html" class="active" style="--d:.24s">Biography</a>
-    <a href="inspiration.html" style="--d:.30s">Inspiration</a>
-    <a href="contact.html" style="--d:.36s">Contact</a>
+    <a href="/" style="--d:.06s">Home</a>
+    <a href="/novels" style="--d:.12s">Novels</a>
+    <a href="/short-stories" style="--d:.18s">Short Stories</a>
+    <a href="/biography" class="active" style="--d:.24s">Biography</a>
+    <a href="/inspiration" style="--d:.30s">Inspiration</a>
+    <a href="/contact" style="--d:.36s">Contact</a>
 </nav>
 
 <main class="page">

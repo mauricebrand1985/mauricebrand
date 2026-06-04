@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maurice Brand — Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Reenie+Beanie&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   MAURICE BRAND — mobile / fluid single-column homepage
+   The same warm desk, the same handwritten paper scraps,
+   re-laid as a vertical descent. Scales fluidly from a phone
+   to a full-width desktop browser (no breakpoint to scatter).
+   ============================================================ */
+
+:root{
+  --ink:#2c2620;
+  --ink-soft:#5a5040;
+  --hw-font:"Reenie Beanie","Segoe Script",cursive;
+  --serif:"EB Garamond",Georgia,"Times New Roman",serif;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; }
+html{ scroll-behavior:smooth; }
+body{
+  font-family:var(--serif);
+  color:var(--ink);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  background:#d6cab2;
+}
+
+/* ---- the desk photograph as a fixed VIEWPORT layer ----
+   (NOT a `background-attachment:fixed` on <body> — on a tall mobile
+   page that scales the image to the whole document height and blows
+   it up into a blurry, stretched mess. A position:fixed element is
+   sized to the viewport, so `cover` keeps the photo near native res.) */
+.desk-bg{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:#d6cab2 url("desk-bg.jpg") center center / cover no-repeat;
+}
+
+/* ---- fixed scene overlays (same grain / vignette as desktop) ---- */
+.desk-grain{
+  position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.4; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.7'/%3E%3C/svg%3E");
+  background-size:150px 150px;
+}
+.photo-grain{
+  position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.55; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='fg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fg)' opacity='0.7'/%3E%3C/svg%3E");
+  background-size:160px 160px;
+}
+.photo-grain.fine{ mix-blend-mode:soft-light; opacity:.45; background-size:84px 84px; }
+.vignette{
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:radial-gradient(140% 120% at 50% 30%, transparent 58%, rgba(60,44,24,0.16) 92%, rgba(48,34,18,0.28) 100%);
+}
+
+/* ---------------- Top bar ---------------- */
+.topbar{
+  position:fixed; top:0; left:0; right:0; z-index:20;
+  display:flex; align-items:center; justify-content:space-between; gap:18px;
+  padding:clamp(14px,2.4vw,26px) clamp(18px,4vw,52px);
+}
+.topbar::before{
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:linear-gradient(180deg, rgba(244,237,220,0.5), rgba(244,237,220,0.16) 62%, transparent);
+  -webkit-mask:linear-gradient(180deg,#000 55%,transparent);
+          mask:linear-gradient(180deg,#000 55%,transparent);
+}
+.wordmark{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(15px,1.9vw,22px); letter-spacing:0.24em; text-transform:uppercase;
+  color:#2f2719; white-space:nowrap; text-decoration:none; line-height:1;
+  padding-bottom:7px; border-bottom:1px solid #241d10;
+  text-shadow:0 0 12px rgba(247,240,223,0.6), 0 0 22px rgba(247,240,223,0.34);
+}
+.wordmark .dot{ opacity:.5; padding:0 .12em; }
+
+/* hamburger */
+.burger{
+  appearance:none; border:none; background:none; cursor:pointer;
+  width:clamp(34px,5vw,46px); height:clamp(26px,4vw,34px);
+  display:flex; flex-direction:column; justify-content:center; gap:clamp(5px,0.8vw,7px);
+  padding:0; position:relative;
+}
+.burger span{
+  display:block; height:1.5px; width:100%;
+  background:#352c1d; border-radius:2px;
+  box-shadow:0 0 10px rgba(247,240,223,0.55);
+  transition:transform .4s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
+}
+body.nav-open .burger span:nth-child(1){ transform:translateY(calc(clamp(5px,0.8vw,7px) + 1.5px)) rotate(45deg); }
+body.nav-open .burger span:nth-child(2){ opacity:0; }
+body.nav-open .burger span:nth-child(3){ transform:translateY(calc(-1 * (clamp(5px,0.8vw,7px) + 1.5px))) rotate(-45deg); }
+
+/* ---------------- Nav drawer ---------------- */
+.nav-drawer{
+  position:fixed; inset:0; z-index:15;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:clamp(18px,3.2vw,30px);
+  background:rgba(38,29,17,0.0); backdrop-filter:blur(0);
+  opacity:0; visibility:hidden; transition:opacity .5s ease, visibility .5s ease, background .5s ease, backdrop-filter .5s ease;
+}
+body.nav-open .nav-drawer{ opacity:1; visibility:visible; background:rgba(38,29,17,0.42); backdrop-filter:blur(4px); }
+.nav-drawer a{
+  font-family:var(--serif); font-weight:500;
+  font-size:clamp(24px,4.6vw,44px); letter-spacing:0.16em; text-transform:uppercase;
+  color:#efe6d2; text-decoration:none; position:relative; line-height:1.05;
+  opacity:0; transform:translateY(14px); transition:color .35s ease;
+}
+.nav-drawer a::after{
+  content:""; position:absolute; left:50%; right:50%; bottom:-6px; height:1px;
+  background:#efe6d2; transition:left .4s cubic-bezier(.2,.7,.2,1), right .4s cubic-bezier(.2,.7,.2,1);
+}
+.nav-drawer a:hover::after, .nav-drawer a.active::after{ left:0; right:0; }
+.nav-drawer a.active{ font-style:italic; }
+body.nav-open .nav-drawer a{ opacity:1; transform:none; transition:opacity .5s ease var(--d,0s), transform .5s cubic-bezier(.2,.7,.2,1) var(--d,0s), color .35s ease; }
+
+/* ---------------- The descent (single fluid column) ---------------- */
+.column{
+  position:relative; z-index:2;
+  display:flex; flex-direction:column; align-items:center;
+  width:100%;
+  padding:clamp(96px,15vw,200px) clamp(14px,3vw,64px) clamp(64px,10vw,140px);
+}
+
+/* a scrap = paper image (stretched to scrap box) + live handwriting on top */
+.scrap-wrap{
+  width:100%; display:flex; justify-content:center;
+  margin-block:clamp(34px,7.5vw,120px);
+  opacity:0; transform:translateY(34px);
+  transition:opacity 1.05s ease, transform 1.05s cubic-bezier(.2,.7,.2,1);
+}
+.scrap-wrap.first{ margin-top:0; }
+.scrap-wrap.in{ opacity:1; transform:none; }
+
+.scrap{
+  position:relative;
+  container-type:inline-size;
+  width:84%;
+  transform:translateX(var(--dx,0)) rotate(var(--rot,0deg));
+}
+.paper-img{
+  display:block; width:100%; height:100%; object-fit:fill;
+  filter:drop-shadow(2px 9px 11px rgba(40,28,12,0.4));
+  -webkit-user-drag:none; user-select:none; pointer-events:none;
+}
+.scrap.flat .paper-img{ filter:drop-shadow(0px 14px 20px rgba(38,26,12,0.2)); }
+
+/* handwriting block — percentage insets so it tracks the paper at any size */
+.hw{
+  position:absolute; left:8%; right:8%; top:var(--ty,18%);
+  display:flex; flex-direction:column; gap:var(--lg,0.6cqw);
+  transform:rotate(var(--htilt,0deg)); transform-origin:center top;
+  pointer-events:none;
+}
+.ln{ display:flex; align-items:baseline; justify-content:center; white-space:nowrap; }
+.ink{
+  font-family:var(--hw-font); font-weight:400; color:var(--ink);
+  line-height:1.05; font-size:var(--fs,7cqw); white-space:nowrap;
+  filter:url(#inkrough);
+}
+/* authored "hands" — same as desktop */
+.hand-rush .ink{ letter-spacing:.012em; }
+.hand-rush .ln{ transform:rotate(-1.4deg); }
+.hand-small .ink{ font-size:calc(var(--fs,7cqw) * .9); opacity:.92; }
+.hand-neat .ln{ transform:rotate(.4deg); }
+
+/* ---------------- Portrait ---------------- */
+.portrait{
+  position:relative; z-index:2;
+  width:clamp(210px,34%,420px);
+  margin:clamp(40px,8vw,120px) auto clamp(28px,5vw,60px);
+  opacity:0; transform:translateY(34px);
+  transition:opacity 1.05s ease, transform 1.05s cubic-bezier(.2,.7,.2,1);
+}
+.portrait.in{ opacity:1; transform:none; }
+.portrait img{
+  display:block; width:100%; height:auto;
+  filter:drop-shadow(2px 11px 14px rgba(40,28,12,0.45));
+  -webkit-user-drag:none; user-select:none;
+}
+
+/* ---------------- Tagline + CTA ---------------- */
+.lede{
+  position:relative; z-index:2; text-align:center;
+  width:min(760px,86%); margin:0 auto;
+  opacity:0; transform:translateY(30px);
+  transition:opacity 1.05s ease, transform 1.05s cubic-bezier(.2,.7,.2,1);
+}
+.lede.in{ opacity:1; transform:none; }
+.lede p{
+  font-family:var(--serif); font-size:clamp(18px,2.4vw,30px);
+  color:#3a3024; line-height:1.45; margin:0 0 clamp(26px,5vw,52px);
+  text-wrap:pretty;
+}
+.enter{
+  font-size:clamp(11px,1.3vw,15px); letter-spacing:.32em; text-transform:uppercase;
+  color:var(--ink-soft); text-decoration:none;
+  display:inline-flex; flex-direction:column; align-items:center; gap:6px;
+}
+.enter .bar{ width:clamp(56px,9vw,90px); height:1px; background:rgba(70,58,40,.5); margin-bottom:9px; }
+.enter .arr{ font-size:clamp(15px,1.8vw,20px); animation:bob 2.4s ease-in-out infinite; }
+@keyframes bob{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(4px); } }
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  .scrap-wrap,.portrait,.lede{ opacity:1; transform:none; transition:none; }
+  .enter .arr{ animation:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- desk photograph, fixed to the viewport (sharp on mobile) -->
+<div class="desk-bg"></div>
+
+<!-- SVG filter: dry-brush ink roughening (same as desktop) -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <filter id="inkrough" x="-12%" y="-30%" width="124%" height="160%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="4" result="coarse"/>
+      <feDisplacementMap in="SourceGraphic" in2="coarse" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d1"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.09 0.12" numOctaves="2" seed="7" result="fine"/>
+      <feDisplacementMap in="d1" in2="fine" scale="1.0" xChannelSelector="R" yChannelSelector="G" result="d2"/>
+      <feTurbulence type="turbulence" baseFrequency="0.34 0.5" numOctaves="1" seed="13" result="sp"/>
+      <feColorMatrix in="sp" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 7 -5.2" result="spm"/>
+      <feComponentTransfer in="spm" result="gaps"><feFuncA type="discrete" tableValues="0 0 0 0.5 0.65"/></feComponentTransfer>
+      <feComposite in="d2" in2="gaps" operator="out" result="dry"/>
+      <feGaussianBlur in="dry" stdDeviation="0.4" result="bleed"/>
+      <feMerge><feMergeNode in="bleed"/><feMergeNode in="dry"/></feMerge>
+    </filter>
+  </defs>
+</svg>
+
+<header class="topbar">
+  <a class="wordmark" href="/" aria-label="Maurice Brand, home">Maurice<span class="dot">·</span>Brand</a>
+  <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<nav class="nav-drawer" id="nav-drawer" aria-label="Primary">
+  <a href="/" class="active" style="--d:.06s">Home</a>
+  <a href="/novels" style="--d:.12s">Novels</a>
+  <a href="/short-stories" style="--d:.18s">Short Stories</a>
+  <a href="/biography" style="--d:.24s">Biography</a>
+  <a href="/inspiration" style="--d:.30s">Inspiration</a>
+  <a href="/contact" style="--d:.36s">Contact</a>
+</nav>
+
+<main class="column">
+
+  <!-- 1 · HERO — the tiger (largest) -->
+  <div class="scrap-wrap first">
+    <a class="scrap hand-neat" href="/short-stories" style="--dx:0;--rot:-1.2deg;width:88%;aspect-ratio:552/400;--fs:5.98cqw;--lg:0.54cqw;--ty:12%;--htilt:-2deg;">
+      <img class="paper-img" src="paper-center.webp" alt="" />
+      <div class="hw">
+        <div class="ln"><span class="ink">Somewhere, a tiger paces a</span></div>
+        <div class="ln"><span class="ink">small enclosure, while elsewhere,</span></div>
+        <div class="ln"><span class="ink">in a forest no one has ever</span></div>
+        <div class="ln"><span class="ink">named, another tiger walks freely,</span></div>
+        <div class="ln"><span class="ink">settling accounts with boars</span></div>
+        <div class="ln"><span class="ink">and deer. One tiger pays for</span></div>
+        <div class="ln"><span class="ink">the other, and neither knows it.</span></div>
+      </div>
+    </a>
+  </div>
+
+  <!-- 2 · the lights / dandelions (on the lined card of the pair) -->
+  <div class="scrap-wrap">
+    <a class="scrap hand-neat" href="/short-stories" style="--dx:-2%;--rot:1.4deg;width:80%;aspect-ratio:474/351;--fs:6.33cqw;--lg:0.42cqw;--htilt:-3deg;">
+      <img class="paper-img" src="topleft-pair.webp" alt="" />
+      <div class="hw" style="left:30%;right:6%;top:12%;">
+        <div class="ln"><span class="ink">The lights above them</span></div>
+        <div class="ln"><span class="ink">bloom like dandelions</span></div>
+        <div class="ln"><span class="ink">coming apart</span></div>
+        <div class="ln"><span class="ink">in the wind.</span></div>
+      </div>
+    </a>
+  </div>
+
+  <!-- 3 · the cold had moved to my teeth -->
+  <div class="scrap-wrap">
+    <a class="scrap hand-small" href="/biography" style="--dx:4%;--rot:-2.2deg;width:76%;aspect-ratio:286/206;--fs:11.5cqw;--lg:1.05cqw;--ty:34%;--htilt:-4deg;">
+      <img class="paper-img" src="paper-lined.webp" alt="" />
+      <div class="hw">
+        <div class="ln"><span class="ink">The cold had moved</span></div>
+        <div class="ln"><span class="ink">to my teeth.</span></div>
+      </div>
+    </a>
+  </div>
+
+  <!-- 4 · they held news / kitchen towel -->
+  <div class="scrap-wrap">
+    <a class="scrap hand-rush" href="/inspiration" style="--dx:-4%;--rot:2deg;width:82%;aspect-ratio:288/187;--fs:9.03cqw;--lg:1.04cqw;--ty:14%;">
+      <img class="paper-img" src="paper-lined2.webp" alt="" />
+      <div class="hw">
+        <div class="ln"><span class="ink">They held news.</span></div>
+        <div class="ln"><span class="ink">I held a kitchen towel.</span></div>
+      </div>
+    </a>
+  </div>
+
+  <!-- 5 · morning reduced the distances (fabric-backed, flat) -->
+  <div class="scrap-wrap">
+    <a class="scrap flat hand-rush" href="/short-stories" style="--dx:3%;--rot:-1.4deg;width:84%;aspect-ratio:380/289;--fs:6.84cqw;--lg:0.79cqw;--ty:30%;--htilt:-8deg;">
+      <img class="paper-img" src="paper-fabric.webp" alt="" />
+      <div class="hw" style="left:6%;right:12%;top:30%;">
+        <div class="ln"><span class="ink">Morning reduced</span></div>
+        <div class="ln"><span class="ink">some of the distances</span></div>
+        <div class="ln"><span class="ink">in the kitchen.</span></div>
+      </div>
+    </a>
+  </div>
+
+  <!-- PORTRAIT -->
+  <a class="portrait" href="/biography" aria-label="Maurice Brand — biography">
+    <img src="author-photo.webp" alt="Maurice Brand" />
+  </a>
+
+  <!-- TAGLINE + CTA -->
+  <div class="lede">
+    <p>Literary fiction, psychological surrealism, and stories of grief, identity, and the difficult work of becoming.</p>
+    <a class="enter" href="/short-stories"><span class="bar"></span>Enter the stories<span class="arr">↓</span></a>
+  </div>
+
+</main>
+
+<div class="desk-grain"></div>
+<div class="photo-grain"></div>
+<div class="photo-grain fine"></div>
+<div class="vignette"></div>
+
+<script>
+/* hamburger ↔ nav drawer */
+const burger = document.getElementById('burger');
+const drawer = document.getElementById('nav-drawer');
+function setNav(open){
+  document.body.classList.toggle('nav-open', open);
+  burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+}
+burger.addEventListener('click', ()=> setNav(!document.body.classList.contains('nav-open')));
+drawer.addEventListener('click', e=>{ if(e.target.tagName==='A' || e.target===drawer) setNav(false); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') setNav(false); });
+
+/* scroll reveal — papers turning over, one at a time */
+const reveal = document.querySelectorAll('.scrap-wrap, .portrait, .lede');
+if('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold:0.18, rootMargin:'0px 0px -8% 0px' });
+  reveal.forEach(el=> io.observe(el));
+  /* anything already in view on load (the hero) reveals immediately */
+  requestAnimationFrame(()=> reveal.forEach(el=>{
+    const r = el.getBoundingClientRect();
+    if(r.top < window.innerHeight*0.9) el.classList.add('in');
+  }));
+} else {
+  reveal.forEach(el=> el.classList.add('in'));
+}
+</script>
+</body>
+</html>
