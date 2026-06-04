@@ -45,7 +45,7 @@ body{
 
 /* ---------------- Topbar ---------------- */
 .topbar{
-  position:fixed; top:var(--kit-offset,0px); left:0; right:0; z-index:8;
+  position:fixed; top:0; left:0; right:0; z-index:8;
   display:flex; align-items:center; justify-content:space-between; gap:24px;
   padding:34px clamp(22px,3.6vw,58px) 0; pointer-events:none;
 }
@@ -71,7 +71,7 @@ nav.menu a:hover,nav.menu a.active{ color:var(--ink); }
 nav.menu a:hover::after,nav.menu a.active::after{ right:0; }
 nav.menu a.active::after{ height:1.5px; }
 .header-veil{
-  position:fixed; top:var(--kit-offset,0px); left:0; right:0; height:118px; z-index:7; pointer-events:none;
+  position:fixed; top:0; left:0; right:0; height:118px; z-index:7; pointer-events:none;
   background:
     radial-gradient(230px 88px at 11% 40px, rgba(246,239,222,0.17), transparent 72%),
     radial-gradient(560px 92px at 80% 40px, rgba(246,239,222,0.15), transparent 74%);
@@ -133,6 +133,32 @@ nav.menu a.active::after{ height:1.5px; }
   .story-card:nth-child(odd),
   .story-card:nth-child(even){ align-self:center; margin-left:0; margin-right:0; }
 }
+
+/* ---- newsletter signup (torn-paper card, like the story cards) ---- */
+.signup{ margin:clamp(60px,9vh,116px) auto 0; max-width:600px; }
+.signup-card{ position:relative; background:url("bio-paper.webp") 0 0 / 100% 100% no-repeat;
+  filter:drop-shadow(3px 12px 16px rgba(38,26,12,0.32));
+  padding:clamp(40px,5vw,62px) clamp(40px,5vw,68px) clamp(34px,4.5vw,52px); text-align:center; }
+.signup-card .signup-eyebrow{ margin:0 0 10px; font-family:var(--serif); font-weight:600; text-transform:uppercase; letter-spacing:0.16em; font-size:clamp(13px,1.05vw,15px); color:#b23a2e; }
+.signup-card .signup-lead{ margin:0 0 clamp(20px,2.4vw,28px); font-style:italic; font-size:clamp(17px,1.4vw,21px); line-height:1.5; color:#42382a; text-wrap:pretty; }
+.signup-card .formkit-form{ margin:0 auto; background:transparent; }
+.signup-card [data-style="clean"]{ padding:0 !important; }
+.signup-card .formkit-powered-by-convertkit-container{ margin:8px 0 0 !important; }
+
+/* signup form field layout inside the card */
+.signup-card .formkit-fields{ display:flex; flex-direction:column; gap:12px; max-width:430px; margin:0 auto; }
+.signup-card .formkit-input{ width:100%; padding:13px 16px; font-family:var(--serif); font-size:17px; background:#fffdf8; line-height:1.4; border-width:1px; border-style:solid; }
+.signup-card .formkit-input:focus{ outline:none; border-color:#8a7e6c; }
+.signup-card .formkit-submit{ width:100%; border:0; cursor:pointer; padding:13px 18px; font-family:var(--serif); font-size:15px; text-transform:uppercase; letter-spacing:0.1em; }
+.signup-card .formkit-submit span{ display:block; }
+.signup-card .formkit-submit:hover{ filter:brightness(0.94); }
+.signup-card .formkit-alert{ list-style:none; padding:0; margin:0 0 10px; color:#b23a2e; font-style:italic; }
+.signup-card .formkit-alert:empty{ display:none; }
+.signup-card .formkit-spinner{ display:none; }
+.signup-card .formkit-powered-by-convertkit-container{ display:flex; justify-content:center; }
+
+.signup-card .formkit-powered-by-convertkit{ font-size:12px; color:#8a7e6c; text-decoration:none; letter-spacing:0.04em; }
+.signup-card .formkit-powered-by-convertkit:hover{ color:#6a5f50; text-decoration:underline; text-underline-offset:2px; }
 </style>
 </head>
 <body>
@@ -177,6 +203,14 @@ nav.menu a.active::after{ height:1.5px; }
       <p class="teaser">A short teaser line.</p>
     </div>
   </div>
+  <section class="signup" aria-label="Newsletter signup">
+    <div class="signup-card">
+      <p class="signup-eyebrow">The Newsletter</p>
+      <p class="signup-lead">I'll email you almost never. When I do, it's a story.</p>
+      <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+      <form action="https://app.kit.com/forms/9521717/subscriptions" class="seva-form formkit-form" method="post" data-sv-form="9521717" data-uid="71b236ef7f" data-format="inline" data-version="5" data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;message&quot;,&quot;success_message&quot;:&quot;Success! Now check your email to confirm your subscription.&quot;,&quot;redirect_url&quot;:&quot;&quot;},&quot;analytics&quot;:{&quot;google&quot;:null,&quot;fathom&quot;:null,&quot;facebook&quot;:null,&quot;segment&quot;:null,&quot;pinterest&quot;:null,&quot;sparkloop&quot;:null,&quot;googletagmanager&quot;:null},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;powered_by&quot;:{&quot;show&quot;:true,&quot;url&quot;:&quot;https://kit.com/features/forms?utm_campaign=poweredby&amp;utm_content=form&amp;utm_medium=referral&amp;utm_source=dynamic&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:false},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;show&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:&quot;bottom_right&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;sticky_bar&quot;:{&quot;display_in&quot;:&quot;top&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15}},&quot;version&quot;:&quot;5&quot;}" min-width="400 500 600 700 800"><div data-style="clean"><ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul><div data-element="fields" data-stacked="false" class="seva-fields formkit-fields"><div class="formkit-field"><input class="formkit-input" name="email_address" aria-label="Email Address" placeholder="Email Address" required="" type="email" style="color: rgb(74, 64, 51); border-color: rgb(187, 177, 163); border-radius: 16px; font-weight: 400;"></div><div class="formkit-field"><input class="formkit-input" aria-label="First Name" name="fields[first_name]" placeholder="First Name" type="text" style="color: rgb(74, 64, 51); border-color: rgb(187, 177, 163); border-radius: 16px; font-weight: 400;"></div><button data-element="submit" class="formkit-submit formkit-submit" style="color: rgb(255, 255, 255); background-color: rgb(153, 141, 124); border-radius: 16px; font-weight: 700;"><div class="formkit-spinner"><div></div><div></div><div></div></div><span class="">Subscribe</span></button></div><div class="formkit-powered-by-convertkit-container"><a href="https://kit.com/features/forms?utm_campaign=poweredby&amp;utm_content=form&amp;utm_medium=referral&amp;utm_source=dynamic" data-element="powered-by" class="formkit-powered-by-convertkit" data-variant="dark" target="_blank" rel="nofollow noopener">Built with Kit</a></div></div></form>
+    </div>
+  </section>
 </main>
 
 <div class="fx desk-grain"></div>
@@ -184,29 +218,5 @@ nav.menu a.active::after{ height:1.5px; }
 <div class="fx vignette"></div>
 <div class="header-veil"></div>
 
-<script async data-uid="e19f60bc29" src="https://maurice-brand.kit.com/e19f60bc29/index.js"></script>
-<script>
-/* drop the fixed site header below the Kit sticky bar so the menu sits under the signup form */
-(function(){
-  var root=document.documentElement;
-  function findBar(){
-    var s=document.querySelector('.formkit-sticky-bar,.seva-sticky-bar,[data-format="sticky"],[data-format="sticky-bar"]');
-    if(s) return s;
-    var f=document.querySelector('div[data-uid="e19f60bc29"],form[data-uid="e19f60bc29"]');
-    if(f){ var el=f; while(el&&el!==document.body){ var p=getComputedStyle(el).position; if(p==='fixed'||p==='sticky') return el; el=el.parentElement; } return f; }
-    return null;
-  }
-  function update(){
-    var bar=findBar(), h=0;
-    if(bar){ var r=bar.getBoundingClientRect(); var hgt=bar.offsetHeight||Math.round(r.height); if(r.top<=4 && hgt>10) h=hgt; }
-    root.style.setProperty('--kit-offset', h+'px');
-  }
-  update();
-  window.addEventListener('resize',update);
-  window.addEventListener('load',update);
-  var n=0, iv=setInterval(function(){ update(); if(++n>75) clearInterval(iv); },400);
-  if(window.MutationObserver){ new MutationObserver(update).observe(document.body,{childList:true,subtree:true}); }
-})();
-</script>
 </body>
 </html>

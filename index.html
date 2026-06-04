@@ -60,7 +60,7 @@ body{
 
 /* ---------------- Topbar ---------------- */
 .topbar{
-  position:fixed; top:var(--kit-offset,0px); left:0; right:0; z-index:8;
+  position:fixed; top:0; left:0; right:0; z-index:8;
   display:flex; align-items:center; justify-content:space-between; gap:24px;
   padding:34px clamp(22px,3.6vw,58px) 0; pointer-events:none;
 }
@@ -90,7 +90,7 @@ nav.menu a:hover::after,nav.menu a.active::after{ right:0; }
 nav.menu a.active::after{ height:1.5px; }
 /* barely-there ivory veil calming the paper just behind the logo + nav (not a strip) */
 .header-veil{
-  position:fixed; top:var(--kit-offset,0px); left:0; right:0; height:118px; z-index:7; pointer-events:none;
+  position:fixed; top:0; left:0; right:0; height:118px; z-index:7; pointer-events:none;
   background:
     radial-gradient(230px 88px at 11% 40px, rgba(246,239,222,0.17), transparent 72%),
     radial-gradient(560px 92px at 80% 40px, rgba(246,239,222,0.15), transparent 74%);
@@ -328,6 +328,123 @@ nav.menu a.active::after{ height:1.5px; }
   nav.menu ul{ gap:11px; }
   .lede{ bottom:18px; }
 }
+
+/* =====================================================================
+   MOBILE + iPAD HOMEPAGE  (the desktop scatter above is untouched)
+   The same desk, papers, hands and CTA, re-laid as a fluid single
+   column. Everything here is namespaced .m-* and lives inside the
+   breakpoint, so it can never reach the desktop layout.
+   Breakpoint: phones + all iPads portrait + standard iPad landscape
+   (≤1024px) OR a large touch tablet in landscape (≤1366 & coarse).
+   ===================================================================== */
+.mobile-home{ display:none; }
+
+@media (max-width:1024px), (min-width:1025px) and (max-width:1366px) and (pointer:coarse){
+  /* turn the desk into a tall, scrollable surface */
+  html,body{ height:auto; }
+  body{ overflow:hidden auto; }
+  /* retire the desktop scene + its chrome (grain/vignette stay, shared) */
+  .scene,#pen,.topbar,.header-veil,.overlay{ display:none !important; }
+
+  .mobile-home{ display:block; }
+
+  /* ---- slim top bar ---- */
+  .m-topbar{ position:fixed; top:0; left:0; right:0; z-index:20;
+    display:flex; align-items:center; justify-content:space-between; gap:18px;
+    padding:clamp(14px,2.4vw,26px) clamp(18px,4vw,52px); }
+  .m-topbar::before{ content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+    background:linear-gradient(180deg, rgba(244,237,220,0.5), rgba(244,237,220,0.16) 62%, transparent);
+    -webkit-mask:linear-gradient(180deg,#000 55%,transparent); mask:linear-gradient(180deg,#000 55%,transparent); }
+  .m-wordmark{ font-family:var(--serif); font-weight:500;
+    font-size:clamp(15px,2vw,22px); letter-spacing:0.24em; text-transform:uppercase;
+    color:#2f2719; white-space:nowrap; text-decoration:none; line-height:1;
+    padding-bottom:7px; border-bottom:1px solid #241d10;
+    text-shadow:0 0 12px rgba(247,240,223,0.6), 0 0 22px rgba(247,240,223,0.34); }
+  .m-wordmark .dot{ opacity:.5; padding:0 .12em; }
+  .m-burger{ appearance:none; border:none; background:none; cursor:pointer;
+    width:clamp(34px,5vw,46px); height:clamp(26px,4vw,34px);
+    display:flex; flex-direction:column; justify-content:center; gap:clamp(5px,0.8vw,7px); padding:0; }
+  .m-burger span{ display:block; height:1.5px; width:100%; background:#352c1d; border-radius:2px;
+    box-shadow:0 0 10px rgba(247,240,223,0.55);
+    transition:transform .4s cubic-bezier(.2,.7,.2,1), opacity .3s ease; }
+  body.m-nav-open .m-burger span:nth-child(1){ transform:translateY(calc(clamp(5px,0.8vw,7px) + 1.5px)) rotate(45deg); }
+  body.m-nav-open .m-burger span:nth-child(2){ opacity:0; }
+  body.m-nav-open .m-burger span:nth-child(3){ transform:translateY(calc(-1 * (clamp(5px,0.8vw,7px) + 1.5px))) rotate(-45deg); }
+
+  /* ---- nav drawer ---- */
+  .m-nav{ position:fixed; inset:0; z-index:15;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:clamp(18px,3.2vw,30px);
+    background:rgba(38,29,17,0.0); backdrop-filter:blur(0);
+    opacity:0; visibility:hidden;
+    transition:opacity .5s ease, visibility .5s ease, background .5s ease, backdrop-filter .5s ease; }
+  body.m-nav-open .m-nav{ opacity:1; visibility:visible; background:rgba(38,29,17,0.42); backdrop-filter:blur(4px); }
+  .m-nav a{ font-family:var(--serif); font-weight:500;
+    font-size:clamp(24px,4.6vw,44px); letter-spacing:0.16em; text-transform:uppercase;
+    color:#efe6d2; text-decoration:none; position:relative; line-height:1.05; text-align:center;
+    opacity:0; transform:translateY(14px); transition:color .35s ease; }
+  .m-nav a::after{ content:""; position:absolute; left:50%; right:50%; bottom:-6px; height:1px; background:#efe6d2;
+    transition:left .4s cubic-bezier(.2,.7,.2,1), right .4s cubic-bezier(.2,.7,.2,1); }
+  .m-nav a:hover::after, .m-nav a.active::after{ left:0; right:0; }
+  .m-nav a.active{ font-style:italic; }
+  body.m-nav-open .m-nav a{ opacity:1; transform:none;
+    transition:opacity .5s ease var(--d,0s), transform .5s cubic-bezier(.2,.7,.2,1) var(--d,0s), color .35s ease; }
+
+  /* ---- the descent (single fluid column) ---- */
+  .m-column{ position:relative; z-index:2;
+    display:flex; flex-direction:column; align-items:center; width:100%;
+    padding:clamp(96px,15vw,200px) clamp(14px,3vw,64px) clamp(64px,10vw,140px); }
+  .m-scrap-wrap{ width:100%; display:flex; justify-content:center;
+    margin-block:clamp(34px,7.5vw,120px);
+    opacity:0; transform:translateY(34px);
+    transition:opacity 1.05s ease, transform 1.05s cubic-bezier(.2,.7,.2,1); }
+  .m-scrap-wrap.first{ margin-top:0; }
+  .m-scrap-wrap.in{ opacity:1; transform:none; }
+  .m-scrap{ position:relative; container-type:inline-size; width:84%;
+    transform:translateX(var(--dx,0)) rotate(var(--rot,0deg)); }
+  .m-paper-img{ display:block; width:100%; height:100%; object-fit:fill;
+    filter:drop-shadow(2px 9px 11px rgba(40,28,12,0.4));
+    -webkit-user-drag:none; user-select:none; pointer-events:none; }
+  .m-scrap.flat .m-paper-img{ filter:drop-shadow(0px 14px 20px rgba(38,26,12,0.2)); }
+  .m-hw{ position:absolute; left:8%; right:8%; top:var(--ty,18%);
+    display:flex; flex-direction:column; gap:var(--lg,0.6cqw);
+    transform:rotate(var(--htilt,0deg)); transform-origin:center top; pointer-events:none; }
+  .m-ln{ display:flex; align-items:baseline; justify-content:center; white-space:nowrap; }
+  .m-ink{ font-family:"Reenie Beanie","Segoe Script",cursive; font-weight:400; color:var(--ink);
+    line-height:1.05; font-size:var(--fs,7cqw); white-space:nowrap; filter:url(#inkrough); }
+  .m-hand-rush .m-ink{ letter-spacing:.012em; }
+  .m-hand-rush .m-ln{ transform:rotate(-1.4deg); }
+  .m-hand-small .m-ink{ font-size:calc(var(--fs,7cqw) * .9); opacity:.92; }
+  .m-hand-neat .m-ln{ transform:rotate(.4deg); }
+
+  /* ---- portrait ---- */
+  .m-portrait{ position:relative; z-index:2; display:block;
+    width:clamp(210px,34%,420px); margin:clamp(40px,8vw,120px) auto clamp(28px,5vw,60px);
+    opacity:0; transform:translateY(34px);
+    transition:opacity 1.05s ease, transform 1.05s cubic-bezier(.2,.7,.2,1); }
+  .m-portrait.in{ opacity:1; transform:none; }
+  .m-portrait img{ display:block; width:100%; height:auto;
+    filter:drop-shadow(2px 11px 14px rgba(40,28,12,0.45));
+    -webkit-user-drag:none; user-select:none; }
+
+  /* ---- tagline + cta ---- */
+  .m-lede{ position:relative; z-index:2; text-align:center; width:min(760px,86%); margin:0 auto;
+    opacity:0; transform:translateY(30px);
+    transition:opacity 1.05s ease, transform 1.05s cubic-bezier(.2,.7,.2,1); }
+  .m-lede.in{ opacity:1; transform:none; }
+  .m-lede p{ font-family:var(--serif); font-size:clamp(18px,2.4vw,30px);
+    color:#3a3024; line-height:1.45; margin:0 0 clamp(26px,5vw,52px); text-wrap:pretty; }
+  .m-enter{ font-size:clamp(11px,1.3vw,15px); letter-spacing:.32em; text-transform:uppercase;
+    color:var(--ink-soft); text-decoration:none;
+    display:inline-flex; flex-direction:column; align-items:center; gap:6px; }
+  .m-enter .m-bar{ width:clamp(56px,9vw,90px); height:1px; background:rgba(70,58,40,.5); margin-bottom:9px; }
+  .m-enter .m-arr{ font-size:clamp(15px,1.8vw,20px); animation:bob 2.4s ease-in-out infinite; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .m-scrap-wrap,.m-portrait,.m-lede{ opacity:1 !important; transform:none !important; transition:none !important; }
+  .m-enter .m-arr{ animation:none; }
+}
 </style>
 </head>
 <body>
@@ -392,6 +509,103 @@ nav.menu a.active::after{ height:1.5px; }
   <div class="stage" id="stage" aria-hidden="true"></div>
 </main>
 
+<!-- ============ MOBILE + iPAD HOMEPAGE (single fluid column) ============ -->
+<div class="mobile-home">
+  <header class="m-topbar">
+    <a class="m-wordmark" href="index.html" aria-label="Maurice Brand, home">Maurice<span class="dot">·</span>Brand</a>
+    <button class="m-burger" id="m-burger" aria-label="Open menu" aria-expanded="false" aria-controls="m-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <nav class="m-nav" id="m-nav" aria-label="Primary">
+    <a href="index.html" class="active" style="--d:.06s">Home</a>
+    <a href="novels.html" style="--d:.12s">Novels</a>
+    <a href="short-stories.html" style="--d:.18s">Short Stories</a>
+    <a href="biography.html" style="--d:.24s">Biography</a>
+    <a href="inspiration.html" style="--d:.30s">Inspiration</a>
+    <a href="contact.html" style="--d:.36s">Contact</a>
+  </nav>
+
+  <main class="m-column">
+
+    <!-- 1 · HERO — the tiger (largest) -->
+    <div class="m-scrap-wrap first">
+      <a class="m-scrap m-hand-neat" href="short-stories.html" style="--dx:0;--rot:-1.2deg;width:88%;aspect-ratio:552/400;--fs:5.98cqw;--lg:0.54cqw;--ty:12%;--htilt:-2deg;">
+        <img class="m-paper-img" src="paper-center.webp" alt="" />
+        <div class="m-hw">
+          <div class="m-ln"><span class="m-ink">Somewhere, a tiger paces a</span></div>
+          <div class="m-ln"><span class="m-ink">small enclosure, while elsewhere,</span></div>
+          <div class="m-ln"><span class="m-ink">in a forest no one has ever</span></div>
+          <div class="m-ln"><span class="m-ink">named, another tiger walks freely.</span></div>
+          <div class="m-ln"><span class="m-ink">One pays for the other,</span></div>
+          <div class="m-ln"><span class="m-ink">and neither knows it.</span></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 2 · the lights / dandelions (on the lined card of the pair) -->
+    <div class="m-scrap-wrap">
+      <a class="m-scrap m-hand-neat" href="short-stories.html" style="--dx:-2%;--rot:1.4deg;width:80%;aspect-ratio:474/351;--fs:6.33cqw;--lg:0.42cqw;--htilt:-3deg;">
+        <img class="m-paper-img" src="topleft-pair.webp" alt="" />
+        <div class="m-hw" style="left:30%;right:6%;top:12%;">
+          <div class="m-ln"><span class="m-ink">The lights above them</span></div>
+          <div class="m-ln"><span class="m-ink">bloom like dandelions</span></div>
+          <div class="m-ln"><span class="m-ink">coming apart</span></div>
+          <div class="m-ln"><span class="m-ink">in the wind.</span></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 3 · the cold had moved to my teeth -->
+    <div class="m-scrap-wrap">
+      <a class="m-scrap m-hand-small" href="biography.html" style="--dx:4%;--rot:-2.2deg;width:76%;aspect-ratio:286/206;--fs:11.5cqw;--lg:1.05cqw;--ty:34%;--htilt:-4deg;">
+        <img class="m-paper-img" src="paper-lined.webp" alt="" />
+        <div class="m-hw">
+          <div class="m-ln"><span class="m-ink">The cold had moved</span></div>
+          <div class="m-ln"><span class="m-ink">to my teeth.</span></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 4 · they held news / kitchen towel -->
+    <div class="m-scrap-wrap">
+      <a class="m-scrap m-hand-rush" href="inspiration.html" style="--dx:-4%;--rot:2deg;width:82%;aspect-ratio:288/187;--fs:9.03cqw;--lg:1.04cqw;--ty:14%;">
+        <img class="m-paper-img" src="paper-lined2.webp" alt="" />
+        <div class="m-hw">
+          <div class="m-ln"><span class="m-ink">They held news.</span></div>
+          <div class="m-ln"><span class="m-ink">I held a kitchen towel.</span></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 5 · morning reduced the distances (fabric-backed, flat) -->
+    <div class="m-scrap-wrap">
+      <a class="m-scrap flat m-hand-rush" href="short-stories.html" style="--dx:3%;--rot:-1.4deg;width:84%;aspect-ratio:380/289;--fs:6.84cqw;--lg:0.79cqw;--ty:30%;--htilt:-8deg;">
+        <img class="m-paper-img" src="paper-fabric.webp" alt="" />
+        <div class="m-hw" style="left:6%;right:12%;top:30%;">
+          <div class="m-ln"><span class="m-ink">Morning reduced</span></div>
+          <div class="m-ln"><span class="m-ink">some of the distances</span></div>
+          <div class="m-ln"><span class="m-ink">in the kitchen.</span></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- PORTRAIT -->
+    <a class="m-portrait" href="biography.html" aria-label="Maurice Brand — biography">
+      <img src="author-photo.webp" alt="Maurice Brand" />
+    </a>
+
+    <!-- TAGLINE + CTA -->
+    <div class="m-lede">
+      <p>Literary fiction, psychological surrealism, and stories of grief, identity, and the difficult work of becoming.</p>
+      <a class="m-enter" href="short-stories.html"><span class="m-bar"></span>Enter the stories<span class="m-arr">↓</span></a>
+    </div>
+
+  </main>
+</div>
+<!-- ============ /MOBILE + iPAD HOMEPAGE ============ -->
+
 <!-- worn fountain pen -->
 <svg id="pen" viewBox="0 0 160 520" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <g filter="url(#penrough)">
@@ -412,7 +626,7 @@ nav.menu a.active::after{ height:1.5px; }
 
 <div class="lede" id="lede">
   <p>Literary fiction, psychological surrealism,<br />and stories of grief, identity, and the difficult work of becoming.</p>
-  <a class="enter" href="#novels" data-nav="Novels"><span class="bar"></span>Enter the stories<span class="arr">↓</span></a>
+  <a class="enter" href="short-stories.html"><span class="bar"></span>Enter the stories<span class="arr">↓</span></a>
 </div>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="ov-title">
@@ -473,8 +687,8 @@ const CONFIG = {
 
     /* centre — the finale (the dominant sheet; never shrunk) — real spiral-torn page */
     { nav:'Home', z:9, img:'paper-center.webp', x:'766px', y:'562px', w:'552px', h:'400px', rot:'-1deg',
-      ty:'12%', fs:'33px', lg:'3px', font:"'Reenie Beanie', cursive", hero:true, extra:'hero', hand:'hand-neat', htilt:'-2deg',
-      lines:[ {t:"Somewhere, a tiger paces a"}, {t:"small enclosure, while elsewhere,"}, {t:"in a forest no one has ever"}, {t:"named, another tiger walks freely,"}, {t:"settling accounts with boars"}, {t:"and deer. One tiger pays for"}, {t:"the other, and neither knows it."} ] },
+      ty:'12%', fs:'35px', lg:'3px', font:"'Reenie Beanie', cursive", hero:true, extra:'hero', hand:'hand-neat', htilt:'-2deg',
+      lines:[ {t:"Somewhere, a tiger paces a"}, {t:"small enclosure, while elsewhere,"}, {t:"in a forest no one has ever"}, {t:"named, another tiger walks freely."}, {t:"One pays for the other,"}, {t:"and neither knows it."} ] },
   ],
 };
 
@@ -492,6 +706,10 @@ const pen   = document.getElementById('pen');
 const lede  = document.getElementById('lede');
 const overlay = document.getElementById('overlay');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* mobile/iPad breakpoint — when this matches we show the single-column home
+   and DO NOT run the desktop scatter+pen intro */
+const MQ_MOBILE = window.matchMedia('(max-width:1024px), (min-width:1025px) and (max-width:1366px) and (pointer:coarse)');
+let deskStarted = false;
 
 /* ---- decorative, non-written elements painted first (behind) ---- */
 function el(cls, css){ const d=document.createElement('div'); d.className=cls; if(css) d.style.cssText=css; return d; }
@@ -655,8 +873,48 @@ async function run(){
   lede.classList.add('show');
 }
 
+/* Intro: the scraps scatter from the centre outward into place, THEN the pen begins.
+   Uses the Web Animations API so each piece reverts cleanly to its CSS resting
+   state on finish (no inline-style clearing race, no stuck-gathered state). */
+function gatherIntro(){
+  const cx=750, cy=500;                       // stage centre (1500×1000)
+  const scraps=[...stage.querySelectorAll('.scrap')];
+  if(!scraps.length) return Promise.resolve();
+  const data=scraps.map(s=>{
+    const cs=getComputedStyle(s);
+    const x=parseFloat(cs.getPropertyValue('--x'))||cx;
+    const y=parseFloat(cs.getPropertyValue('--y'))||cy;
+    const rot=(cs.getPropertyValue('--rot')||'0deg').trim();
+    return { s, dx:(cx-x).toFixed(1), dy:(cy-y).toFixed(1), rot, dist:Math.hypot(cx-x,cy-y) };
+  }).sort((a,b)=>a.dist-b.dist);   // inner pieces settle first → a scatter outward
+  const proms=data.map((d,i)=>{
+    const delay=140 + i*95;
+    const a=d.s.animate(
+      [ { transform:`translate(-50%,-50%) translate(${d.dx}px,${d.dy}px) scale(.14) rotate(${d.rot})`, opacity:0 },
+        { transform:`translate(-50%,-50%) rotate(${d.rot})`, opacity:1 } ],
+      { duration:900, delay, easing:'cubic-bezier(.18,.74,.16,1)', fill:'backwards' }
+    );
+    return a.finished.catch(()=>{});
+  });
+  return Promise.all(proms);
+}
+
 if(reduceMotion){ document.body.classList.add('reduced'); lede.classList.add('show'); }
-else (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>{ fit(); run(); });
+else {
+  fit();
+  if(!MQ_MOBILE.matches) startDesktopIntro();
+}
+/* crossing into desktop (e.g. an iPad rotated, or a window widened) kicks off the
+   scatter+pen once; crossing into mobile after it has run is harmless (scene hidden) */
+MQ_MOBILE.addEventListener('change', e=>{ fit(); if(!e.matches) startDesktopIntro(); });
+
+function startDesktopIntro(){
+  if(deskStarted||reduceMotion) return; deskStarted=true;
+  const fontsReady = (document.fonts&&document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+  fit();
+  const scattered = gatherIntro();            // start the scatter immediately
+  Promise.all([fontsReady, scattered]).then(()=>{ fit(); run(); });  // pen waits for both
+}
 
 /* tagline is part of the composition — move it inside the scaled stage */
 stage.appendChild(lede);
@@ -686,29 +944,36 @@ document.getElementById('ov-close').addEventListener('click',closeOverlay);
 overlay.addEventListener('click',e=>{ if(e.target===overlay) closeOverlay(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeOverlay(); });
 document.querySelectorAll('[data-nav]').forEach(a=>{ if(a.tagName==='A'){ a.addEventListener('click',e=>{ e.preventDefault(); openSection(a.dataset.nav,''); }); } });
-</script>
-<script async data-uid="e19f60bc29" src="https://maurice-brand.kit.com/e19f60bc29/index.js"></script>
-<script>
-/* drop the fixed site header below the Kit sticky bar so the menu sits under the signup form */
+
+/* ===================== MOBILE + iPAD: hamburger + scroll reveal ===================== */
 (function(){
-  var root=document.documentElement;
-  function findBar(){
-    var s=document.querySelector('.formkit-sticky-bar,.seva-sticky-bar,[data-format="sticky"],[data-format="sticky-bar"]');
-    if(s) return s;
-    var f=document.querySelector('div[data-uid="e19f60bc29"],form[data-uid="e19f60bc29"]');
-    if(f){ var el=f; while(el&&el!==document.body){ var p=getComputedStyle(el).position; if(p==='fixed'||p==='sticky') return el; el=el.parentElement; } return f; }
-    return null;
+  const burger = document.getElementById('m-burger');
+  const drawer = document.getElementById('m-nav');
+  if(burger && drawer){
+    function setNav(open){
+      document.body.classList.toggle('m-nav-open', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    }
+    burger.addEventListener('click', ()=> setNav(!document.body.classList.contains('m-nav-open')));
+    drawer.addEventListener('click', e=>{ if(e.target.tagName==='A' || e.target===drawer) setNav(false); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') setNav(false); });
   }
-  function update(){
-    var bar=findBar(), h=0;
-    if(bar){ var r=bar.getBoundingClientRect(); var hgt=bar.offsetHeight||Math.round(r.height); if(r.top<=4 && hgt>10) h=hgt; }
-    root.style.setProperty('--kit-offset', h+'px');
+
+  /* papers turn over one at a time as they enter the viewport */
+  const reveal = document.querySelectorAll('.m-scrap-wrap, .m-portrait, .m-lede');
+  if('IntersectionObserver' in window && !reduceMotion){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold:0.18, rootMargin:'0px 0px -8% 0px' });
+    reveal.forEach(el=> io.observe(el));
+    requestAnimationFrame(()=> reveal.forEach(el=>{
+      const r = el.getBoundingClientRect();
+      if(r.top < window.innerHeight*0.9) el.classList.add('in');
+    }));
+  } else {
+    reveal.forEach(el=> el.classList.add('in'));
   }
-  update();
-  window.addEventListener('resize',update);
-  window.addEventListener('load',update);
-  var n=0, iv=setInterval(function(){ update(); if(++n>75) clearInterval(iv); },400);
-  if(window.MutationObserver){ new MutationObserver(update).observe(document.body,{childList:true,subtree:true}); }
 })();
 </script>
 </body>
