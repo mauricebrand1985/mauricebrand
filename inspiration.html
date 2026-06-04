@@ -26,6 +26,7 @@
   --rule:#b9a585;
 }
 *{ box-sizing:border-box; }
+a,button{ touch-action:manipulation; -webkit-tap-highlight-color:rgba(0,0,0,0); }
 html{ scroll-behavior:smooth; }
 body{
   margin:0; min-height:100%;
@@ -160,10 +161,13 @@ nav.menu a.active::after{ height:1.5px; }
 }
 
 /* ---------------- HERO ROW (photo + intro) ---------------- */
-.hero{ display:grid; grid-template-columns:minmax(260px,330px) 1fr; gap:clamp(36px,5vw,84px); align-items:center; margin-bottom:clamp(58px,9vh,104px); }
+.hero{ display:grid; grid-template-columns:minmax(260px,330px) 1fr; gap:clamp(36px,5vw,84px); align-items:start; margin-bottom:clamp(58px,9vh,104px); }
+.intro-col{ display:flex; flex-direction:column; gap:clamp(22px,2.8vw,40px); }
 .hero .portrait{ margin-top:0; }
 .intro-sheet .sheet-inner{ padding:clamp(40px,5vw,68px) clamp(44px,5.5vw,76px); }
 .intro-sheet p{ margin:0; font-size:clamp(18px,1.5vw,23px); line-height:1.72; color:#33291d; text-wrap:pretty; letter-spacing:0.004em; }
+.intro-sheet .epigraph{ margin:0; font-style:italic; font-size:clamp(19px,1.65vw,26px); line-height:1.48; color:#3a3025; text-align:center; text-wrap:balance; }
+.intro-sheet .attr{ margin:clamp(12px,1.4vw,18px) 0 0; text-align:center; font-size:clamp(12px,1vw,14px); letter-spacing:0.14em; text-transform:uppercase; color:#b23a2e; }
 
 /* ---------------- CARD SEQUENCE (Short Stories style, left-aligned note) ---------------- */
 .cards{ max-width:1140px; margin:0 auto; display:flex; flex-direction:column; gap:clamp(40px,6.5vh,78px); }
@@ -230,6 +234,30 @@ nav.menu a.active::after{ height:1.5px; }
 
 .signup-card .formkit-powered-by-convertkit{ font-size:12px; color:#8a7e6c; text-decoration:none; letter-spacing:0.04em; }
 .signup-card .formkit-powered-by-convertkit:hover{ color:#6a5f50; text-decoration:underline; text-underline-offset:2px; }
+
+/* ---- mobile hamburger menu (matches the homepage) ---- */
+.m-burger{ display:none; }
+.m-nav{ display:none; }
+@media (max-width:1024px), (min-width:1025px) and (max-width:1366px) and (pointer:coarse){
+  .topbar{ flex-direction:row !important; align-items:center; justify-content:space-between; gap:16px; padding:20px clamp(16px,4.5vw,30px) 0 !important; }
+  nav.menu{ display:none !important; }
+  body.m-nav-open .topbar{ z-index:16; }
+  .m-burger{ display:flex; pointer-events:auto; appearance:none; border:none; background:none; cursor:pointer;
+    width:clamp(34px,8vw,44px); height:clamp(22px,6vw,28px); flex-direction:column; justify-content:center; gap:6px; padding:0; margin-left:auto; }
+  .m-burger span{ display:block; height:1.5px; width:100%; background:#352c1d; border-radius:2px; box-shadow:0 0 10px rgba(247,240,223,0.55); transition:transform .4s cubic-bezier(.2,.7,.2,1), opacity .3s ease; }
+  body.m-nav-open .m-burger span:nth-child(1){ transform:translateY(7.5px) rotate(45deg); }
+  body.m-nav-open .m-burger span:nth-child(2){ opacity:0; }
+  body.m-nav-open .m-burger span:nth-child(3){ transform:translateY(-7.5px) rotate(-45deg); }
+  .m-nav{ display:flex; position:fixed; inset:0; z-index:15; flex-direction:column; align-items:center; justify-content:center; gap:clamp(18px,4vw,30px);
+    background:rgba(38,29,17,0); backdrop-filter:blur(0); -webkit-backdrop-filter:blur(0); opacity:0; visibility:hidden;
+    transition:opacity .5s ease, visibility .5s ease, background .5s ease, backdrop-filter .5s ease; }
+  body.m-nav-open .m-nav{ opacity:1; visibility:visible; background:rgba(38,29,17,0.42); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+  .m-nav a{ font-family:var(--serif); font-weight:500; font-size:clamp(24px,6.4vw,40px); letter-spacing:0.16em; text-transform:uppercase; color:#efe6d2; text-decoration:none; position:relative; line-height:1.05; text-align:center; opacity:0; transform:translateY(14px); transition:color .35s ease; }
+  .m-nav a::after{ content:""; position:absolute; left:50%; right:50%; bottom:-6px; height:1px; background:#efe6d2; transition:left .4s cubic-bezier(.2,.7,.2,1), right .4s cubic-bezier(.2,.7,.2,1); }
+  .m-nav a.active{ font-style:italic; }
+  body.m-nav-open .m-nav a{ opacity:1; transform:none; transition:opacity .5s ease var(--d,0s), transform .5s cubic-bezier(.2,.7,.2,1) var(--d,0s), color .35s ease; }
+}
+@media (max-width:1024px) and (hover:hover){ .m-nav a:hover::after{ left:0; right:0; } }
 </style>
 </head>
 <body>
@@ -246,7 +274,16 @@ nav.menu a.active::after{ height:1.5px; }
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </nav>
+  <button class="m-burger" id="m-burger" aria-label="Open menu" aria-expanded="false" aria-controls="m-nav"><span></span><span></span><span></span></button>
 </header>
+<nav class="m-nav" id="m-nav" aria-label="Primary">
+    <a href="index.html" style="--d:.06s">Home</a>
+    <a href="novels.html" style="--d:.12s">Novels</a>
+    <a href="short-stories.html" style="--d:.18s">Short Stories</a>
+    <a href="biography.html" style="--d:.24s">Biography</a>
+    <a href="inspiration.html" class="active" style="--d:.30s">Inspiration</a>
+    <a href="contact.html" style="--d:.36s">Contact</a>
+</nav>
 
 <main class="page">
   <div class="page-title">
@@ -260,11 +297,19 @@ nav.menu a.active::after{ height:1.5px; }
         <img src="inspiration-books.jpg" alt="A stack of well-read books in a lamplit room" />
       </div>
     </figure>
-    <article class="sheet intro-sheet">
-      <div class="sheet-inner">
-        <p>These are the books I keep within reach. Not a reading list so much as a set of permissions—each one proof that the strange, the unbearable, and the unresolved all belong on the page. I return to them the way other people return to certain rooms.</p>
-      </div>
-    </article>
+    <div class="intro-col">
+      <article class="sheet intro-sheet">
+        <div class="sheet-inner">
+          <p class="epigraph">“No poet, no artist of any art, has his complete meaning alone.”</p>
+          <p class="attr">— T. S. Eliot</p>
+        </div>
+      </article>
+      <article class="sheet intro-sheet">
+        <div class="sheet-inner">
+          <p>The novels below know my fingerprints by heart. I’ve turned their pages slowly, and more than once, not for the story but to catch the moment a sentence does something I didn’t know a sentence could do.</p>
+        </div>
+      </article>
+    </div>
   </div>
 
   <div class="cards">
@@ -275,84 +320,43 @@ nav.menu a.active::after{ height:1.5px; }
         <p class="book">The Wind-Up Bird Chronicle</p>
       </div>
       <div class="cdiv"></div>
-      <p class="note">What I study here is the temperature of the sentences. The stranger the event, the more level the prose: a man climbs down a dry well and the syntax doesn't flinch, doesn't signal that anything unusual is happening. The uncanny gets admitted on the same flat register as boiling spaghetti or ironing a shirt—and that refusal to dramatize is what makes us believe it.</p>
+      <p class="note">The protagonist barely acts. He stays at home, eats spaghetti, listens to music, answers the phone, and yet the book never slackens, because Murakami lets the world arrive at his door instead of sending the hero out after it. The momentum is all intrusion, not agency. The prose stays plain, almost flat, and that flatness is exactly what makes the strange parts credible: when the sentences refuse to act surprised, neither do we.</p>
     </article>
 
     <article class="ins-card">
       <div class="ins-head">
         <span class="numeral">II.</span>
-        <h2 class="author">Franz Kafka</h2>
-        <p class="book">The Trial</p>
+        <h2 class="author">Albert Camus</h2>
+        <p class="book">The Stranger</p>
       </div>
       <div class="cdiv"></div>
-      <p class="note">The horror is administrative. Kafka files a nightmare under correct procedure—forms, waiting rooms, officials who are only following the rules—and never once raises his voice about it. The prose stays patient, almost courteous, while the logic underneath comes apart. I keep returning to how much dread a calm, reasonable sentence can carry when it simply declines to admit that anything is wrong.</p>
+      <p class="note">Meursault reports his own life without emotion, and Camus never fills in for him. The prose stays flat and exact. Short declaratives, events set down without comment, a narrator who registers the heat and the light instead of his grief. The same blankness covers his motive: he kills a man, offers no reason worth the name, and refuses to assemble a why. Camus withholds both the feeling and the reason, and the reader, unable to bear the gap, leans in and supplies them.</p>
     </article>
 
     <article class="ins-card">
       <div class="ins-head">
         <span class="numeral">III.</span>
-        <h2 class="author">Fyodor Dostoevsky</h2>
-        <p class="book">Crime and Punishment</p>
+        <h2 class="author">Cormac McCarthy</h2>
+        <p class="book">The Road</p>
       </div>
       <div class="cdiv"></div>
-      <p class="note">Dostoevsky writes consciousness at a fever. The sentences crowd and double back, contradict themselves mid-thought, run on past where a calmer writer would stop—and the effect is a mind you seem to overhear rather than read. Nothing is summarized from a safe distance; you are pressed up against the thinking as it happens. I admire how disordered prose can be the most honest record of a disordered mind.</p>
+      <p class="note">The dialogue is stripped to almost nothing. No quotation marks, few tags, often a single bare word. The father and the son say okay to each other over and over, and it is never the same okay twice: one is reassurance, one is surrender, one is a held breath, and you always know which without being told. McCarthy proves how much a plain word can carry when everything else has been taken away. The meaning was never in the word but in the silence and the situation around it.</p>
     </article>
 
     <article class="ins-card">
       <div class="ins-head">
         <span class="numeral">IV.</span>
-        <h2 class="author">Albert Camus</h2>
-        <p class="book">The Stranger</p>
+        <h2 class="author">Franz Kafka</h2>
+        <p class="book">The Trial</p>
       </div>
       <div class="cdiv"></div>
-      <p class="note">Camus empties the sentence of feeling and lets the reader supply it. The famous flatness—short declaratives, events reported without comment, a narrator who notices the weather more than his own grief—isn't coldness; it's restraint loaded like a spring. Withholding the expected emotion makes the reader lean in to find it. I study the discipline it takes to leave that much unsaid.</p>
-    </article>
-
-    <article class="ins-card">
-      <div class="ins-head">
-        <span class="numeral">V.</span>
-        <h2 class="author">George Orwell</h2>
-        <p class="book">Animal Farm</p>
-      </div>
-      <div class="cdiv"></div>
-      <p class="note">Orwell taught me that clarity is a moral position. He wrote to be understood—plain words, concrete nouns, no fog of abstraction to hide behind—and treated a muddy sentence as a small dishonesty. The discipline isn't decoration; it's the refusal to let language do your thinking for you. I return to him whenever a paragraph starts sounding impressive instead of true.</p>
-    </article>
-
-    <article class="ins-card">
-      <div class="ins-head">
-        <span class="numeral">VI.</span>
-        <h2 class="author">Cormac McCarthy</h2>
-        <p class="book">The Road</p>
-      </div>
-      <div class="cdiv"></div>
-      <p class="note">The lesson is subtraction. Stripped of quotation marks and most of its punctuation, the prose moves like weather; the plainness isn't poverty but music, every “and” load-bearing. He's proof of how little a sentence needs before it stops reaching the chest.</p>
-    </article>
-
-    <article class="ins-card">
-      <div class="ins-head">
-        <span class="numeral">VII.</span>
-        <h2 class="author">Yōko Ogawa</h2>
-        <p class="book">Hotel Iris</p>
-      </div>
-      <div class="cdiv"></div>
-      <p class="note">What I take from Ogawa is restraint as pressure. She keeps the prose cool and exact even as it approaches the unbearable; nothing is sensationalized, the surface stays calm and almost domestic, and that quiet is precisely what makes the disquiet land. The dread lives in the gap between the gentle telling and the dark thing being told. I trust her never to tidy the mystery away.</p>
-    </article>
-
-    <article class="ins-card">
-      <div class="ins-head">
-        <span class="numeral">VIII.</span>
-        <h2 class="author">Paul Auster</h2>
-        <p class="book">The New York Trilogy</p>
-      </div>
-      <div class="cdiv"></div>
-      <p class="note">Auster builds a detective story and then refuses to solve it. Clues accumulate, identities slip, the investigation folds back on the investigator—and the book ends with the mystery deliberately open, the machinery left showing. What I take from him is the nerve to treat coincidence and dead ends as the structure itself rather than a failure of plotting. He proves a story can satisfy without resolving.</p>
+      <p class="note">Kafka drains the impossible of shock. A man is arrested one morning and never told why. The events are narrated exactly the way ordinary ones would be, never doubted, never explained. Everyone around him treats this as normal; only the accused, and the reader, sense that something is wrong. And the charge never comes: Kafka withholds the crime for the whole novel, so the guilt has nothing to attach to, and the calm of the telling is what makes it unbearable.</p>
     </article>
   </div>
 
   <article class="coda">
     <div class="coda-inner">
-      <p>Beneath the fiction runs Carl Jung. The slow labor of individuation, the shadow we refuse to look at, the personas we wear in its place—these are the currents I keep writing toward. The novels I love best are the ones brave enough to descend, and to come back changed.</p>
-      <p>What I take from all of them is the same quiet lesson: tell the truth slant, trust the reader, and never tidy away what was never meant to be resolved.</p>
+      <p>Beneath much of what I write runs Carl Jung: the slow labor of becoming whole, the shadow we refuse to know, the masks we polish until we mistake them for faces. His work matters to me because it doesn’t ask us to defeat darkness, but to meet it without being ruled by it. Other voices I keep returning to, off the page and outside fiction: Nietzsche, Schopenhauer, Cioran, Peter Wessel Zapffe, Viktor Frankl, and Alan Watts.</p>
     </div>
   </article>
   <div class="end-rule"></div>
@@ -371,5 +375,6 @@ nav.menu a.active::after{ height:1.5px; }
 <div class="fx vignette"></div>
 <div class="header-veil"></div>
 
+<script>(function(){var b=document.getElementById('m-burger'),d=document.getElementById('m-nav');if(!b||!d)return;function set(o){document.body.classList.toggle('m-nav-open',o);b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Close menu':'Open menu');}b.addEventListener('click',function(){set(!document.body.classList.contains('m-nav-open'));});d.addEventListener('click',function(e){if(e.target.tagName==='A'||e.target===d)set(false);});document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});})();</script>
 </body>
 </html>

@@ -25,6 +25,7 @@
   --serif:"EB Garamond",Georgia,"Times New Roman",serif;
 }
 *{ box-sizing:border-box; }
+a,button{ touch-action:manipulation; -webkit-tap-highlight-color:rgba(0,0,0,0); }
 html,body{ height:100%; margin:0; }
 body{
   font-family:var(--serif);
@@ -221,28 +222,30 @@ nav.menu a.active::after{ height:1.5px; }
   filter:saturate(0.8) brightness(0.86) drop-shadow(2px 5px 6px rgba(40,28,12,0.34));
   pointer-events:none; -webkit-user-drag:none; user-select:none; transition:filter .45s ease;
 }
-.envelope-note:hover .env-closed,.envelope-note:focus-within .env-closed{
+.envelope-note:focus-within .env-closed{
   filter:saturate(0.7) brightness(0.46) drop-shadow(2px 5px 6px rgba(40,28,12,0.34));
 }
+@media (hover:hover){ .envelope-note:hover .env-closed{ filter:saturate(0.7) brightness(0.46) drop-shadow(2px 5px 6px rgba(40,28,12,0.34)); } }
 .envelope-note .env-label{
   position:absolute; inset:0; z-index:3; display:flex; align-items:center; justify-content:center;
   font-family:var(--serif); color:#fff; text-transform:uppercase; letter-spacing:0.12em;
   font-size:14px; opacity:0; transition:opacity .45s ease; pointer-events:none; white-space:nowrap;
   text-shadow:0 1px 4px rgba(0,0,0,0.6); transform:rotate(7deg);
 }
-.envelope-note:hover .env-label,.envelope-note:focus-within .env-label{ opacity:1; }
+.envelope-note:focus-within .env-label{ opacity:1; }
+@media (hover:hover){ .envelope-note:hover .env-label{ opacity:1; } }
 
 /* photo: darken the PHOTO itself on hover (not its shadow / transparent torn-edge gaps) + label fade */
 .photo-note .photo-dark{ display:none; }
 .photo-note .paper-img{ transition:filter .45s ease; }
-.photo-note:hover .paper-img{ filter:brightness(0.5) drop-shadow(2px 7px 7px rgba(40,28,12,0.42)); }
+@media (hover:hover){ .photo-note:hover .paper-img{ filter:brightness(0.5) drop-shadow(2px 7px 7px rgba(40,28,12,0.42)); } }
 .photo-note .photo-label{
   position:absolute; inset:0; z-index:3; display:flex; align-items:center; justify-content:center;
   font-family:var(--serif); color:#efe6d2; text-transform:uppercase; letter-spacing:0.18em;
   font-size:21px; opacity:0; transition:opacity .45s ease; pointer-events:none;
   text-shadow:0 1px 10px rgba(20,14,6,0.7);
 }
-.photo-note:hover .photo-label{ opacity:1; }
+@media (hover:hover){ .photo-note:hover .photo-label{ opacity:1; } }
 
 /* ---------------- Handwriting (crisp, on top of the paper) */
 .hw{ position:absolute; left:8%; right:8%; top:var(--ty,42%); display:flex; flex-direction:column; gap:var(--lg,4px); pointer-events:none; }
@@ -425,7 +428,7 @@ nav.menu a.active::after{ height:1.5px; }
   .m-portrait.in{ opacity:1; transform:none; }
   .m-portrait img{ display:block; width:100%; height:auto;
     filter:drop-shadow(2px 11px 14px rgba(40,28,12,0.45));
-    -webkit-user-drag:none; user-select:none; }
+    -webkit-user-drag:none; user-select:none; pointer-events:none; }
 
   /* ---- tagline + cta ---- */
   .m-lede{ position:relative; z-index:2; text-align:center; width:min(760px,86%); margin:0 auto;
@@ -534,10 +537,11 @@ nav.menu a.active::after{ height:1.5px; }
       <a class="m-scrap m-hand-neat" href="short-stories.html" style="--dx:0;--rot:-1.2deg;width:88%;aspect-ratio:552/400;--fs:5.98cqw;--lg:0.54cqw;--ty:12%;--htilt:-2deg;">
         <img class="m-paper-img" src="paper-center.webp" alt="" />
         <div class="m-hw">
-          <div class="m-ln"><span class="m-ink">Somewhere, a tiger paces a</span></div>
-          <div class="m-ln"><span class="m-ink">small enclosure, while elsewhere,</span></div>
-          <div class="m-ln"><span class="m-ink">in a forest no one has ever</span></div>
-          <div class="m-ln"><span class="m-ink">named, another tiger walks freely.</span></div>
+          <div class="m-ln"><span class="m-ink">Somewhere, a tiger paces</span></div>
+          <div class="m-ln"><span class="m-ink">a small enclosure, while</span></div>
+          <div class="m-ln"><span class="m-ink">elsewhere, in a forest</span></div>
+          <div class="m-ln"><span class="m-ink">no one has ever named,</span></div>
+          <div class="m-ln"><span class="m-ink">another tiger walks freely.</span></div>
           <div class="m-ln"><span class="m-ink">One pays for the other,</span></div>
           <div class="m-ln"><span class="m-ink">and neither knows it.</span></div>
         </div>
@@ -575,6 +579,17 @@ nav.menu a.active::after{ height:1.5px; }
         <div class="m-hw">
           <div class="m-ln"><span class="m-ink">They held news.</span></div>
           <div class="m-ln"><span class="m-ink">I held a kitchen towel.</span></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- · thanks, I don't do neighboring (novels) -->
+    <div class="m-scrap-wrap">
+      <a class="m-scrap m-hand-rush" href="novels.html" style="--dx:-3%;--rot:-2deg;width:80%;aspect-ratio:296/214;--fs:8.6cqw;--lg:1cqw;--ty:33%;--htilt:-1deg;">
+        <img class="m-paper-img" src="paper-taped.webp" alt="" />
+        <div class="m-hw">
+          <div class="m-ln"><span class="m-ink">Thanks, I said, but</span></div>
+          <div class="m-ln"><span class="m-ink">I don't do neighboring.</span></div>
         </div>
       </a>
     </div>
@@ -666,19 +681,19 @@ const CONFIG = {
   /* every scrap: paper style, placement in the 1500x1000 stage, tilt, phrase(s) */
   notes: [
     { nav:'Short Stories', z:6, img:'topleft-pair.webp', x:'264px', y:'312px', w:'474px', h:'351px', rot:'-1deg',
-      fs:'30px', lg:'2px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(30% + 3px);right:calc(6% - 3px);top:12%;', extra:'near', hand:'hand-neat', htilt:'-3deg',
+      fs:'34px', lg:'2px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(30% + 3px);right:calc(6% - 3px);top:12%;', extra:'near', hand:'hand-neat', htilt:'-3deg',
       lines:[ {t:"The lights above them"}, {t:"bloom like dandelions"}, {t:"coming apart"}, {t:"in the wind."} ] },
 
-    { nav:'Biography', z:7, img:'paper-lined.webp', x:'662px', y:'306px', w:'286px', h:'206px', rot:'2deg',
-      ty:'36%', fs:'33px', lg:'3px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(8% - 5px);right:calc(8% + 5px);top:calc(36% - 10px);', extra:'far', hand:'hand-small', htilt:'-5deg',
-      lines:[ {t:"The cold had moved"}, {t:"to my teeth."} ] },
+    { nav:'Biography', z:7, img:'paper-lined.webp', x:'662px', y:'296px', w:'286px', h:'206px', rot:'2deg',
+      ty:'36%', fs:'37px', lg:'3px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(8% - 5px);right:calc(8% + 5px);top:calc(36% - 10px);', extra:'far', hand:'hand-small', htilt:'-5deg',
+      lines:[ {t:"The cold had"}, {t:"moved to my teeth."} ] },
 
     { nav:'Inspiration', z:6, img:'paper-lined2.webp', x:'938px', y:'346px', w:'288px', h:'187px', rot:'2deg',
-      ty:'13%', fs:'26px', lg:'3px', font:"'Reenie Beanie', cursive", hwStyle:'top:calc(13% + 7px);', extra:'far', hand:'hand-rush', htilt:'0deg',
+      ty:'13%', fs:'26px', lg:'3px', font:"'Reenie Beanie', cursive", hwStyle:'top:calc(13% + 12px);', extra:'far', hand:'hand-rush', htilt:'0deg',
       lines:[ {t:"They held news."}, {t:"I held a kitchen towel."} ] },
 
     { nav:'Novels', z:8, img:'paper-taped.webp', x:'1210px', y:'222px', w:'296px', h:'214px', rot:'-3deg',
-      ty:'38%', fs:'25px', lg:'2px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(7% + 3px);right:calc(9% - 3px);', extra:'far', hand:'hand-rush', htilt:'-1deg',
+      ty:'38%', fs:'25px', lg:'2px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(7% + 6px);right:calc(9% - 6px);top:calc(38% - 5px);', extra:'far', hand:'hand-rush', htilt:'-1deg',
       lines:[ {t:"Thanks, I said, but"}, {t:"I don't do neighboring."} ] },
 
     { nav:'Short Stories', z:8, img:'paper-fabric.webp', flat:true, imgFilter:'drop-shadow(0px 14px 20px rgba(38,26,12,0.21))', x:'278px', y:'770px', w:'380px', h:'289px', rot:'-1deg',
@@ -687,8 +702,8 @@ const CONFIG = {
 
     /* centre — the finale (the dominant sheet; never shrunk) — real spiral-torn page */
     { nav:'Home', z:9, img:'paper-center.webp', x:'766px', y:'562px', w:'552px', h:'400px', rot:'-1deg',
-      ty:'12%', fs:'35px', lg:'3px', font:"'Reenie Beanie', cursive", hero:true, extra:'hero', hand:'hand-neat', htilt:'-2deg',
-      lines:[ {t:"Somewhere, a tiger paces a"}, {t:"small enclosure, while elsewhere,"}, {t:"in a forest no one has ever"}, {t:"named, another tiger walks freely."}, {t:"One pays for the other,"}, {t:"and neither knows it."} ] },
+      ty:'12%', fs:'37px', lg:'3px', font:"'Reenie Beanie', cursive", hero:true, extra:'hero', hand:'hand-neat', htilt:'-2deg',
+      lines:[ {t:"Somewhere, a tiger paces"}, {t:"a small enclosure, while"}, {t:"elsewhere, in a forest"}, {t:"no one has ever named,"}, {t:"another tiger walks freely."}, {t:"One pays for the other,"}, {t:"and neither knows it."} ] },
   ],
 };
 

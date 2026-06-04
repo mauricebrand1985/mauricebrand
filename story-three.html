@@ -23,6 +23,7 @@
   --rust:#b23a2e;
 }
 *{ box-sizing:border-box; }
+a,button{ touch-action:manipulation; -webkit-tap-highlight-color:rgba(0,0,0,0); }
 html{ scroll-behavior:smooth; }
 body{
   margin:0; min-height:100%;
@@ -155,6 +156,30 @@ nav.menu a.active::after{ height:1.5px; }
 
 .signup-card .formkit-powered-by-convertkit{ font-size:12px; color:#8a7e6c; text-decoration:none; letter-spacing:0.04em; }
 .signup-card .formkit-powered-by-convertkit:hover{ color:#6a5f50; text-decoration:underline; text-underline-offset:2px; }
+
+/* ---- mobile hamburger menu (matches the homepage) ---- */
+.m-burger{ display:none; }
+.m-nav{ display:none; }
+@media (max-width:1024px), (min-width:1025px) and (max-width:1366px) and (pointer:coarse){
+  .topbar{ flex-direction:row !important; align-items:center; justify-content:space-between; gap:16px; padding:20px clamp(16px,4.5vw,30px) 0 !important; }
+  nav.menu{ display:none !important; }
+  body.m-nav-open .topbar{ z-index:16; }
+  .m-burger{ display:flex; pointer-events:auto; appearance:none; border:none; background:none; cursor:pointer;
+    width:clamp(34px,8vw,44px); height:clamp(22px,6vw,28px); flex-direction:column; justify-content:center; gap:6px; padding:0; margin-left:auto; }
+  .m-burger span{ display:block; height:1.5px; width:100%; background:#352c1d; border-radius:2px; box-shadow:0 0 10px rgba(247,240,223,0.55); transition:transform .4s cubic-bezier(.2,.7,.2,1), opacity .3s ease; }
+  body.m-nav-open .m-burger span:nth-child(1){ transform:translateY(7.5px) rotate(45deg); }
+  body.m-nav-open .m-burger span:nth-child(2){ opacity:0; }
+  body.m-nav-open .m-burger span:nth-child(3){ transform:translateY(-7.5px) rotate(-45deg); }
+  .m-nav{ display:flex; position:fixed; inset:0; z-index:15; flex-direction:column; align-items:center; justify-content:center; gap:clamp(18px,4vw,30px);
+    background:rgba(38,29,17,0); backdrop-filter:blur(0); -webkit-backdrop-filter:blur(0); opacity:0; visibility:hidden;
+    transition:opacity .5s ease, visibility .5s ease, background .5s ease, backdrop-filter .5s ease; }
+  body.m-nav-open .m-nav{ opacity:1; visibility:visible; background:rgba(38,29,17,0.42); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+  .m-nav a{ font-family:var(--serif); font-weight:500; font-size:clamp(24px,6.4vw,40px); letter-spacing:0.16em; text-transform:uppercase; color:#efe6d2; text-decoration:none; position:relative; line-height:1.05; text-align:center; opacity:0; transform:translateY(14px); transition:color .35s ease; }
+  .m-nav a::after{ content:""; position:absolute; left:50%; right:50%; bottom:-6px; height:1px; background:#efe6d2; transition:left .4s cubic-bezier(.2,.7,.2,1), right .4s cubic-bezier(.2,.7,.2,1); }
+  .m-nav a.active{ font-style:italic; }
+  body.m-nav-open .m-nav a{ opacity:1; transform:none; transition:opacity .5s ease var(--d,0s), transform .5s cubic-bezier(.2,.7,.2,1) var(--d,0s), color .35s ease; }
+}
+@media (max-width:1024px) and (hover:hover){ .m-nav a:hover::after{ left:0; right:0; } }
 </style>
 </head>
 <body>
@@ -171,7 +196,16 @@ nav.menu a.active::after{ height:1.5px; }
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </nav>
+  <button class="m-burger" id="m-burger" aria-label="Open menu" aria-expanded="false" aria-controls="m-nav"><span></span><span></span><span></span></button>
 </header>
+<nav class="m-nav" id="m-nav" aria-label="Primary">
+    <a href="index.html" style="--d:.06s">Home</a>
+    <a href="novels.html" style="--d:.12s">Novels</a>
+    <a href="short-stories.html" class="active" style="--d:.18s">Short Stories</a>
+    <a href="biography.html" style="--d:.24s">Biography</a>
+    <a href="inspiration.html" style="--d:.30s">Inspiration</a>
+    <a href="contact.html" style="--d:.36s">Contact</a>
+</nav>
 
 <main class="page">
   <article class="sheet">
@@ -180,7 +214,8 @@ nav.menu a.active::after{ height:1.5px; }
         <span class="numeral">III.</span>
         <h1>Story Title Three</h1>
         <div class="div"></div>
-      </header>
+        <button class="m-burger" id="m-burger" aria-label="Open menu" aria-expanded="false" aria-controls="m-nav"><span></span><span></span><span></span></button>
+</header>
 
       <div class="story">
         <p>[ Placeholder text — send me the finished story and I will set it here in full. ] The opening lines go here, carrying the reader in on the strength of the first image. Keep the voice close and the detail exact, and the page will do the rest.</p>
@@ -210,5 +245,6 @@ nav.menu a.active::after{ height:1.5px; }
 <div class="fx vignette"></div>
 <div class="header-veil"></div>
 
+<script>(function(){var b=document.getElementById('m-burger'),d=document.getElementById('m-nav');if(!b||!d)return;function set(o){document.body.classList.toggle('m-nav-open',o);b.setAttribute('aria-expanded',o?'true':'false');b.setAttribute('aria-label',o?'Close menu':'Open menu');}b.addEventListener('click',function(){set(!document.body.classList.contains('m-nav-open'));});d.addEventListener('click',function(e){if(e.target.tagName==='A'||e.target===d)set(false);});document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});})();</script>
 </body>
 </html>
