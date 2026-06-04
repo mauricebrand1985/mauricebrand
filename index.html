@@ -32,7 +32,7 @@ body{
   overflow:hidden;
   -webkit-font-smoothing:antialiased;
   /* real desk-paper photograph, stretched to fill the viewport */
-  background:#d6cab2 url("desk-bg.png") center center / cover no-repeat fixed;
+  background:#d6cab2 url("desk-bg.jpg") center center / cover no-repeat fixed;
 }
 /* the photographic desk already carries tone; keep these overlays minimal */
 .desk-stains{
@@ -60,7 +60,7 @@ body{
 
 /* ---------------- Topbar ---------------- */
 .topbar{
-  position:fixed; top:0; left:0; right:0; z-index:8;
+  position:fixed; top:var(--kit-offset,0px); left:0; right:0; z-index:8;
   display:flex; align-items:center; justify-content:space-between; gap:24px;
   padding:34px clamp(22px,3.6vw,58px) 0; pointer-events:none;
 }
@@ -90,7 +90,7 @@ nav.menu a:hover::after,nav.menu a.active::after{ right:0; }
 nav.menu a.active::after{ height:1.5px; }
 /* barely-there ivory veil calming the paper just behind the logo + nav (not a strip) */
 .header-veil{
-  position:fixed; top:0; left:0; right:0; height:118px; z-index:7; pointer-events:none;
+  position:fixed; top:var(--kit-offset,0px); left:0; right:0; height:118px; z-index:7; pointer-events:none;
   background:
     radial-gradient(230px 88px at 11% 40px, rgba(246,239,222,0.17), transparent 72%),
     radial-gradient(560px 92px at 80% 40px, rgba(246,239,222,0.15), transparent 74%);
@@ -232,12 +232,10 @@ nav.menu a.active::after{ height:1.5px; }
 }
 .envelope-note:hover .env-label,.envelope-note:focus-within .env-label{ opacity:1; }
 
-/* photo: darken + section label fade in/out on hover (menu font + colour) */
-.photo-note .photo-dark{
-  position:absolute; inset:0; z-index:2; pointer-events:none; border-radius:7px;
-  background:rgba(28,20,10,0.46); opacity:0; transition:opacity .45s ease;
-}
-.photo-note:hover .photo-dark{ opacity:1; }
+/* photo: darken the PHOTO itself on hover (not its shadow / transparent torn-edge gaps) + label fade */
+.photo-note .photo-dark{ display:none; }
+.photo-note .paper-img{ transition:filter .45s ease; }
+.photo-note:hover .paper-img{ filter:brightness(0.5) drop-shadow(2px 7px 7px rgba(40,28,12,0.42)); }
 .photo-note .photo-label{
   position:absolute; inset:0; z-index:3; display:flex; align-items:center; justify-content:center;
   font-family:var(--serif); color:#efe6d2; text-transform:uppercase; letter-spacing:0.18em;
@@ -372,15 +370,15 @@ nav.menu a.active::after{ height:1.5px; }
 </svg>
 
 <header class="topbar">
-  <a class="wordmark" href="#" data-nav="Home" aria-label="Maurice Brand, home">Maurice<span class="dot">·</span>Brand</a>
+  <a class="wordmark" href="index.html" aria-label="Maurice Brand, home">Maurice<span class="dot">·</span>Brand</a>
   <nav class="menu" aria-label="Primary">
     <ul>
-      <li><a href="#home" class="active" data-nav="Home">Home</a></li>
-      <li><a href="#novels" data-nav="Novels">Novels</a></li>
-      <li><a href="#short-stories" data-nav="Short Stories">Short Stories</a></li>
-      <li><a href="/biography" data-page="Biography">Biography</a></li>
-      <li><a href="/inspiration" data-page="Inspiration">Inspiration</a></li>
-      <li><a href="/contact" data-page="Contact">Contact</a></li>
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="novels.html">Novels</a></li>
+      <li><a href="short-stories.html">Short Stories</a></li>
+      <li><a href="biography.html" data-page="Biography">Biography</a></li>
+      <li><a href="inspiration.html" data-page="Inspiration">Inspiration</a></li>
+      <li><a href="contact.html" data-page="Contact">Contact</a></li>
     </ul>
   </nav>
 </header>
@@ -453,28 +451,28 @@ const CONFIG = {
   parallaxPx      : 14,
   /* every scrap: paper style, placement in the 1500x1000 stage, tilt, phrase(s) */
   notes: [
-    { nav:'Short Stories', z:6, img:'topleft-pair.png', x:'264px', y:'312px', w:'474px', h:'351px', rot:'-1deg',
+    { nav:'Short Stories', z:6, img:'topleft-pair.webp', x:'264px', y:'312px', w:'474px', h:'351px', rot:'-1deg',
       fs:'30px', lg:'2px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(30% + 3px);right:calc(6% - 3px);top:12%;', extra:'near', hand:'hand-neat', htilt:'-3deg',
       lines:[ {t:"The lights above them"}, {t:"bloom like dandelions"}, {t:"coming apart"}, {t:"in the wind."} ] },
 
-    { nav:'Biography', z:7, img:'paper-lined.png', x:'662px', y:'306px', w:'286px', h:'206px', rot:'2deg',
+    { nav:'Biography', z:7, img:'paper-lined.webp', x:'662px', y:'306px', w:'286px', h:'206px', rot:'2deg',
       ty:'36%', fs:'33px', lg:'3px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(8% - 5px);right:calc(8% + 5px);top:calc(36% - 10px);', extra:'far', hand:'hand-small', htilt:'-5deg',
       lines:[ {t:"The cold had moved"}, {t:"to my teeth."} ] },
 
-    { nav:'Inspiration', z:6, img:'paper-lined2.png', x:'938px', y:'346px', w:'288px', h:'187px', rot:'2deg',
+    { nav:'Inspiration', z:6, img:'paper-lined2.webp', x:'938px', y:'346px', w:'288px', h:'187px', rot:'2deg',
       ty:'13%', fs:'26px', lg:'3px', font:"'Reenie Beanie', cursive", hwStyle:'top:calc(13% + 7px);', extra:'far', hand:'hand-rush', htilt:'0deg',
       lines:[ {t:"They held news."}, {t:"I held a kitchen towel."} ] },
 
-    { nav:'Novels', z:8, img:'paper-taped.png', x:'1210px', y:'222px', w:'296px', h:'214px', rot:'-3deg',
+    { nav:'Novels', z:8, img:'paper-taped.webp', x:'1210px', y:'222px', w:'296px', h:'214px', rot:'-3deg',
       ty:'38%', fs:'25px', lg:'2px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(7% + 3px);right:calc(9% - 3px);', extra:'far', hand:'hand-rush', htilt:'-1deg',
       lines:[ {t:"Thanks, I said, but"}, {t:"I don't do neighboring."} ] },
 
-    { nav:'Short Stories', z:8, img:'paper-fabric.png', flat:true, imgFilter:'drop-shadow(0px 14px 20px rgba(38,26,12,0.21))', x:'278px', y:'770px', w:'380px', h:'289px', rot:'-1deg',
+    { nav:'Short Stories', z:8, img:'paper-fabric.webp', flat:true, imgFilter:'drop-shadow(0px 14px 20px rgba(38,26,12,0.21))', x:'278px', y:'770px', w:'380px', h:'289px', rot:'-1deg',
       ty:'32%', fs:'26px', lg:'3px', font:"'Reenie Beanie', cursive", hwStyle:'left:calc(1% + 20px);right:calc(17% - 20px);', extra:'near', hand:'hand-rush', htilt:'-8deg',
       lines:[ {t:"Morning reduced"}, {t:"some of the distances"}, {t:"in the kitchen."} ] },
 
     /* centre — the finale (the dominant sheet; never shrunk) — real spiral-torn page */
-    { nav:'Home', z:9, img:'paper-center.png', x:'766px', y:'562px', w:'552px', h:'400px', rot:'-1deg',
+    { nav:'Home', z:9, img:'paper-center.webp', x:'766px', y:'562px', w:'552px', h:'400px', rot:'-1deg',
       ty:'12%', fs:'33px', lg:'3px', font:"'Reenie Beanie', cursive", hero:true, extra:'hero', hand:'hand-neat', htilt:'-2deg',
       lines:[ {t:"Somewhere, a tiger paces a"}, {t:"small enclosure, while elsewhere,"}, {t:"in a forest no one has ever"}, {t:"named, another tiger walks freely,"}, {t:"settling accounts with boars"}, {t:"and deer. One tiger pays for"}, {t:"the other, and neither knows it."} ] },
   ],
@@ -507,10 +505,10 @@ function el(cls, css){ const d=document.createElement('div'); d.className=cls; i
 (function(){
   const s = el('scrap envelope-note', '--x:1238px;--y:524px;--w:112px;--h:92px;--rot:-4deg;z-index:6;');
   s.dataset.nav='Contact';
-  const closed = document.createElement('img'); closed.className='env-closed'; closed.src='envelope-closed.png'; closed.alt='Contact'; closed.draggable=false;
+  const closed = document.createElement('img'); closed.className='env-closed'; closed.src='envelope-closed.webp'; closed.alt='Contact'; closed.draggable=false;
   const label = el('env-label'); label.textContent='Contact';
   s.appendChild(closed); s.appendChild(label);
-  s.addEventListener('click', ()=>{ window.location.href='/contact'; });
+  s.addEventListener('click', ()=>{ window.location.href='contact.html'; });
   stage.appendChild(s);
 })();
 
@@ -518,11 +516,11 @@ function el(cls, css){ const d=document.createElement('div'); d.className=cls; i
 (function(){
   const s = el('scrap img-note photo-note', '--x:1220px;--y:776px;--w:178px;--h:228px;--rot:2deg;z-index:8;');
   s.dataset.nav='Biography';
-  const im = document.createElement('img'); im.className='paper-img'; im.src='author-photo.png'; im.alt='Maurice Brand'; im.draggable=false;
+  const im = document.createElement('img'); im.className='paper-img'; im.src='author-photo.webp'; im.alt='Maurice Brand'; im.draggable=false;
   const dark = el('photo-dark');
   const label = el('photo-label'); label.textContent='Biography';
   s.appendChild(im); s.appendChild(dark); s.appendChild(label);
-  s.addEventListener('click', ()=>{ window.location.href='/biography'; });
+  s.addEventListener('click', ()=>{ window.location.href='biography.html'; });
   stage.appendChild(s);
 })();
 
@@ -668,11 +666,11 @@ let px=0,py=0,tpx=0,tpy=0;
 window.addEventListener('mousemove',e=>{ tpx=-(e.clientX/innerWidth-.5)*CONFIG.parallaxPx; tpy=-(e.clientY/innerHeight-.5)*CONFIG.parallaxPx; });
 (function par(){ px+=(tpx-px)*.07; py+=(tpy-py)*.07; stage.style.setProperty('--px',px.toFixed(2)+'px'); stage.style.setProperty('--py',py.toFixed(2)+'px'); requestAnimationFrame(par); })();
 
-/* ---- hover lift + click ---- */
+/* ---- hover lift + click → Novels page (no popup) ---- */
 noteEls.forEach(n=>{
   n.s.addEventListener('pointerenter',()=>n.s.style.setProperty('--lift','-10px'));
   n.s.addEventListener('pointerleave',()=>n.s.style.setProperty('--lift','0px'));
-  n.s.addEventListener('click',()=>openSection(n.cfg.nav, n.cfg.lines.map(l=>l.t).join(' ')));
+  n.s.addEventListener('click',()=>{ window.location.href='novels.html'; });
 });
 
 /* ---- overlay ---- */
@@ -688,6 +686,30 @@ document.getElementById('ov-close').addEventListener('click',closeOverlay);
 overlay.addEventListener('click',e=>{ if(e.target===overlay) closeOverlay(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeOverlay(); });
 document.querySelectorAll('[data-nav]').forEach(a=>{ if(a.tagName==='A'){ a.addEventListener('click',e=>{ e.preventDefault(); openSection(a.dataset.nav,''); }); } });
+</script>
+<script async data-uid="e19f60bc29" src="https://maurice-brand.kit.com/e19f60bc29/index.js"></script>
+<script>
+/* drop the fixed site header below the Kit sticky bar so the menu sits under the signup form */
+(function(){
+  var root=document.documentElement;
+  function findBar(){
+    var s=document.querySelector('.formkit-sticky-bar,.seva-sticky-bar,[data-format="sticky"],[data-format="sticky-bar"]');
+    if(s) return s;
+    var f=document.querySelector('div[data-uid="e19f60bc29"],form[data-uid="e19f60bc29"]');
+    if(f){ var el=f; while(el&&el!==document.body){ var p=getComputedStyle(el).position; if(p==='fixed'||p==='sticky') return el; el=el.parentElement; } return f; }
+    return null;
+  }
+  function update(){
+    var bar=findBar(), h=0;
+    if(bar){ var r=bar.getBoundingClientRect(); var hgt=bar.offsetHeight||Math.round(r.height); if(r.top<=4 && hgt>10) h=hgt; }
+    root.style.setProperty('--kit-offset', h+'px');
+  }
+  update();
+  window.addEventListener('resize',update);
+  window.addEventListener('load',update);
+  var n=0, iv=setInterval(function(){ update(); if(++n>75) clearInterval(iv); },400);
+  if(window.MutationObserver){ new MutationObserver(update).observe(document.body,{childList:true,subtree:true}); }
+})();
 </script>
 </body>
 </html>

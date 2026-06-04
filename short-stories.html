@@ -3,24 +3,25 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Maurice Brand — Inspiration</title>
+<title>Maurice Brand — Short Stories</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
 <style>
 /* ============================================================
-   MAURICE BRAND — INSPIRATION
-   Same aged-desk world as the homepage, but a calm, readable
-   document page. The right-hand sheet is a real torn-paper scan
-   rendered with border-image so it STRETCHES to any text length:
-   the four torn corners stay fixed and crisp, the four torn edges
-   stretch continuously (no tiling, no broken frays), and the
-   cream centre fills behind the words.
+   MAURICE BRAND — SHORT STORIES (index)
+   Same aged-desk world as the rest of the site. A centred
+   stack of torn aged-paper cards, gently staggered, each one
+   a doorway into a single story.
    ============================================================ */
 :root{
-  --ink:#2c2620;
+  --ink:#2c2419;
   --ink-soft:#544a3b;
+  --body:#3a3025;
   --serif:"EB Garamond",Georgia,"Times New Roman",serif;
+  --engrave:"Cinzel",Georgia,serif;
+  --rule:#b9a585;
+  --rust:#b23a2e;
 }
 *{ box-sizing:border-box; }
 html{ scroll-behavior:smooth; }
@@ -28,10 +29,10 @@ body{
   margin:0; min-height:100%;
   font-family:var(--serif); color:var(--ink);
   -webkit-font-smoothing:antialiased;
-  background:#d6cab2 url("desk-bg.jpg") center top / cover no-repeat fixed;
+  background:#d2cbbc url("desk-bg.jpg") center top / cover no-repeat fixed;
 }
 
-/* ---- fixed photographic overlays so the page reads as one aged photo ---- */
+/* ---- fixed photographic overlays ---- */
 .fx{ position:fixed; inset:0; pointer-events:none; }
 .desk-grain{ z-index:1; opacity:.4; mix-blend-mode:multiply;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.7'/%3E%3C/svg%3E");
@@ -42,7 +43,7 @@ body{
 .vignette{ z-index:6;
   background:radial-gradient(135% 120% at 50% 38%, transparent 56%, rgba(60,44,24,0.13) 90%, rgba(48,34,18,0.24) 100%); }
 
-/* ---------------- Topbar (matches homepage) ---------------- */
+/* ---------------- Topbar ---------------- */
 .topbar{
   position:fixed; top:var(--kit-offset,0px); left:0; right:0; z-index:8;
   display:flex; align-items:center; justify-content:space-between; gap:24px;
@@ -78,82 +79,59 @@ nav.menu a.active::after{ height:1.5px; }
 
 /* ---------------- Page shell ---------------- */
 .page{ position:relative; z-index:3; max-width:1320px; margin:0 auto;
-  padding:clamp(120px,15vh,170px) clamp(24px,5vw,72px) clamp(80px,12vh,130px); }
+  padding:clamp(120px,15vh,170px) clamp(24px,5vw,72px) clamp(96px,14vh,150px); }
 
-.page-title{ text-align:center; margin:0 0 clamp(40px,6vh,64px); }
+.page-title{ text-align:center; margin:0 0 clamp(48px,7vh,80px); }
 .page-title h1{
-  font-family:var(--serif); font-weight:500; margin:0;
-  font-size:clamp(34px,5vw,60px); letter-spacing:0.16em; text-transform:uppercase;
+  font-family:var(--engrave); font-weight:500; margin:0;
+  font-size:clamp(34px,5.2vw,62px); letter-spacing:0.12em; text-transform:uppercase;
   color:#2c2519;
   text-shadow:0 0 16px rgba(247,240,223,0.45);
 }
-.page-title .rule{ width:46px; height:2px; background:#3a3024; opacity:.65; margin:22px auto 0; }
+.page-title .rule{ width:46px; height:2px; background:#3a3024; opacity:.6; margin:20px auto 18px; }
+.page-title .sub{ font-style:italic; font-size:clamp(17px,1.5vw,22px); color:var(--ink-soft); margin:0; letter-spacing:0.01em; }
 
-/* ---------------- Two-column layout ---------------- */
-.bio-grid{
-  display:grid; grid-template-columns:minmax(260px,330px) 1fr;
-  gap:clamp(36px,5vw,84px); align-items:start;
+/* ---------------- Staggered story cards ---------------- */
+.stories{
+  max-width:1140px; margin:0 auto;
+  display:flex; flex-direction:column; gap:clamp(30px,4.5vh,56px);
 }
-
-/* ---- taped portrait ---- */
-.portrait{ position:relative; margin-top:clamp(8px,3vh,46px); justify-self:center; width:100%; max-width:330px; }
-.portrait .card{
-  position:relative; transform:rotate(-1.4deg);
-  background:linear-gradient(160deg,#efe7d3,#e7ddc4);
-  padding:16px 16px 18px; border-radius:2px;
-  box-shadow:0 18px 34px rgba(40,28,12,0.30), 0 2px 5px rgba(40,28,12,0.22);
-}
-.portrait .card::after{ /* faint paper grain on the mount */
-  content:""; position:absolute; inset:0; pointer-events:none; mix-blend-mode:multiply; opacity:.5; border-radius:2px;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='pb'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pb)' opacity='0.35'/%3E%3C/svg%3E");
-  background-size:120px 120px;
-}
-.portrait img{ display:block; width:100%; height:auto; -webkit-user-drag:none; user-select:none;
-  filter:saturate(1.02) contrast(1.02); }
-.portrait .tape{
-  position:absolute; z-index:4; top:-20px; left:-14px; width:104px; height:42px;
-  transform:rotate(-38deg); transform-origin:center;
-  background:linear-gradient(180deg, rgba(216,200,162,0.82), rgba(196,178,138,0.74));
-  mix-blend-mode:multiply; opacity:.86;
-  box-shadow:0 2px 6px rgba(60,44,22,0.24);
-  border-radius:2px;
-}
-.portrait .tape::after{ content:""; position:absolute; inset:0; opacity:.32; mix-blend-mode:multiply; border-radius:2px;
-  background:repeating-linear-gradient(90deg, transparent 0 5px, rgba(110,90,60,.25) 5px 6px); }
-.portrait .caption{
-  margin:18px 4px 0; text-align:center; color:var(--ink-soft);
-  font-size:14px; letter-spacing:0.22em; text-transform:uppercase;
-}
-
-/* ---- the growing torn-paper sheet ----
-   ONE continuous torn-paper scan stretched to the box (background-size:100% 100%).
-   Because it is a single image, the four torn edges can never tile, seam, or
-   break apart no matter how long the text runs — they simply scale with the
-   sheet. The transparent frays let the desk show through, and drop-shadow
-   traces that real torn silhouette. */
-.sheet{
-  position:relative;
+.story-card{
+  position:relative; display:block; width:min(580px,100%);
+  text-align:center; text-decoration:none; color:inherit;
+  padding:clamp(38px,3.6vw,52px) clamp(46px,5.5vw,82px) clamp(40px,4vw,56px);
   background:url("bio-paper.webp") 0 0 / 100% 100% no-repeat;
-  filter:drop-shadow(3px 13px 17px rgba(38,26,12,0.34));
+  filter:drop-shadow(3px 12px 16px rgba(38,26,12,0.32));
+  transition:transform .5s cubic-bezier(.2,.7,.2,1), filter .5s ease;
 }
-.sheet-inner{
-  /* clears the deckle frays on every side; scales gently with the sheet */
-  padding:clamp(56px,7vw,92px) clamp(60px,7vw,96px) clamp(60px,8vw,104px);
+/* gentle stagger: left, right, left … */
+.story-card:nth-child(odd){ align-self:flex-start; margin-left:clamp(0px,4vw,72px); }
+.story-card:nth-child(even){ align-self:flex-end; margin-right:clamp(0px,4vw,72px); }
+.story-card:hover{ transform:none; }
+
+.story-card .numeral{
+  display:block; font-family:var(--engrave); font-weight:500;
+  font-size:clamp(16px,1.3vw,20px); letter-spacing:0.06em; color:var(--rust);
+  margin-bottom:clamp(14px,1.4vw,20px);
 }
-.bio p{
-  font-size:clamp(18px,1.42vw,22px); line-height:1.72; color:#33291d;
-  margin:0; text-wrap:pretty; letter-spacing:0.004em;
+.story-card .title{
+  margin:0; font-family:var(--serif); font-weight:600; text-transform:uppercase;
+  font-size:clamp(23px,2.3vw,33px); letter-spacing:0.06em; color:var(--ink);
+  line-height:1.12; text-wrap:balance;
 }
-.bio .div{ text-align:center; color:#7a6c52; font-size:20px; margin:1.55em 0; line-height:1; user-select:none; }
-.bio .last{ font-style:italic; color:#42382a; }
+.story-card .teaser{
+  margin:clamp(16px,1.8vw,24px) auto 0; max-width:34ch;
+  font-style:italic; font-size:clamp(16px,1.35vw,20px); line-height:1.5;
+  color:#5a4f3d; text-wrap:pretty;
+}
 
 /* ---------------- responsive ---------------- */
-@media (max-width:780px){
-  .bio-grid{ grid-template-columns:1fr; gap:30px; }
-  .portrait{ max-width:260px; }
+@media (max-width:720px){
   .topbar{ flex-direction:column; gap:12px; align-items:flex-start; padding-top:24px; }
   nav.menu ul{ gap:13px; flex-wrap:wrap; }
-  .sheet-inner{ padding:34px 30px 38px; }
+  .story-card{ width:100%; }
+  .story-card:nth-child(odd),
+  .story-card:nth-child(even){ align-self:center; margin-left:0; margin-right:0; }
 }
 </style>
 </head>
@@ -165,9 +143,9 @@ nav.menu a.active::after{ height:1.5px; }
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="novels.html">Novels</a></li>
-      <li><a href="short-stories.html">Short Stories</a></li>
+      <li><a href="short-stories.html" class="active">Short Stories</a></li>
       <li><a href="biography.html">Biography</a></li>
-      <li><a href="inspiration.html" class="active">Inspiration</a></li>
+      <li><a href="inspiration.html">Inspiration</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </nav>
@@ -175,28 +153,29 @@ nav.menu a.active::after{ height:1.5px; }
 
 <main class="page">
   <div class="page-title">
-    <h1>Inspiration</h1>
+    <h1>Short Stories</h1>
     <div class="rule"></div>
+    <p class="sub">Selected short fiction.</p>
   </div>
 
-  <div class="bio-grid">
-    <figure class="portrait">
-      <div class="card">
-        <img src="inspiration-books.jpg" alt="A stack of well-read books in a lamplit room" />
-      </div>
-    </figure>
+  <div class="stories">
+    <div class="story-card">
+      <span class="numeral">I.</span>
+      <h2 class="title">Coming Soon</h2>
+      <p class="teaser">A short teaser line.</p>
+    </div>
 
-    <article class="sheet">
-      <div class="sheet-inner bio">
-        <p>These are the books I keep within reach. Not a reading list so much as a set of permissions—each one proof that the strange, the unbearable, and the unresolved all belong on the page. I return to them the way other people return to certain rooms.</p>
-        <div class="div">—</div>
-        <p>Haruki Murakami taught me that the uncanny can sit quietly beside the ordinary, that a man can climb down a well or follow a cat into another world and we will believe him as long as the sentences stay calm. Kafka and Dostoevsky made guilt and bureaucracy into weather systems; Camus and Sartre offered the cold clarity of a life examined without comfort. Orwell gave me discipline of thought, Cormac McCarthy the music of plainness, and Yoko Ogawa and Paul Auster the elegance of a mystery left half-closed.</p>
-        <div class="div">—</div>
-        <p>Beneath the fiction runs Carl Jung. The slow labor of individuation, the shadow we refuse to look at, the personas we wear in its place—these are the currents I keep writing toward. The novels I love best are the ones brave enough to descend, and to come back changed.</p>
-        <div class="div">—</div>
-        <p>What I take from all of them is the same quiet lesson: tell the truth slant, trust the reader, and never tidy away what was never meant to be resolved.</p>
-      </div>
-    </article>
+    <div class="story-card">
+      <span class="numeral">II.</span>
+      <h2 class="title">Coming Soon</h2>
+      <p class="teaser">A short teaser line.</p>
+    </div>
+
+    <div class="story-card">
+      <span class="numeral">III.</span>
+      <h2 class="title">Coming Soon</h2>
+      <p class="teaser">A short teaser line.</p>
+    </div>
   </div>
 </main>
 

@@ -31,7 +31,7 @@ body{
   margin:0; min-height:100%;
   font-family:var(--serif); color:var(--ink);
   -webkit-font-smoothing:antialiased;
-  background:#d6cab2 url("desk-bg.png") center top / cover no-repeat fixed;
+  background:#d6cab2 url("desk-bg.jpg") center top / cover no-repeat fixed;
 }
 
 /* ---- fixed photographic overlays so the page reads as one aged photo ---- */
@@ -44,7 +44,7 @@ body{
 
 /* ---------------- Topbar (matches the other pages) ---------------- */
 .topbar{
-  position:fixed; top:0; left:0; right:0; z-index:8;
+  position:fixed; top:var(--kit-offset,0px); left:0; right:0; z-index:8;
   display:flex; align-items:center; justify-content:space-between; gap:24px;
   padding:34px clamp(22px,3.6vw,58px) 0; pointer-events:none;
 }
@@ -70,7 +70,7 @@ nav.menu a:hover,nav.menu a.active{ color:var(--ink); }
 nav.menu a:hover::after,nav.menu a.active::after{ right:0; }
 nav.menu a.active::after{ height:1.5px; }
 .header-veil{
-  position:fixed; top:0; left:0; right:0; height:118px; z-index:7; pointer-events:none;
+  position:fixed; top:var(--kit-offset,0px); left:0; right:0; height:118px; z-index:7; pointer-events:none;
   background:
     radial-gradient(230px 88px at 11% 40px, rgba(246,239,222,0.17), transparent 72%),
     radial-gradient(560px 92px at 80% 40px, rgba(246,239,222,0.15), transparent 74%);
@@ -186,7 +186,9 @@ textarea.fld{ width:100%; min-height:170px; resize:both; line-height:1.5; }
 .form-side.is-sent .field-row,
 .form-side.is-sent .field-block,
 .form-side.is-sent .send{ display:none; }
-.form-side.is-sent .sent-note{ display:block; }
+.form-side.is-sent #sentNote{ display:block; }
+.form-side.is-error #errNote{ display:block; margin:14px 0 0; align-self:stretch; }
+.send.is-busy{ opacity:.55; pointer-events:none; }
 
 /* ---------------- right — the address side ---------------- */
 .addr-side{ position:relative; min-height:380px; }
@@ -259,8 +261,8 @@ textarea.fld{ width:100%; min-height:170px; resize:both; line-height:1.5; }
   <nav class="menu" aria-label="Primary">
     <ul>
       <li><a href="index.html">Home</a></li>
-      <li><a href="index.html">Novels</a></li>
-      <li><a href="index.html">Short Stories</a></li>
+      <li><a href="novels.html">Novels</a></li>
+      <li><a href="short-stories.html">Short Stories</a></li>
       <li><a href="biography.html">Biography</a></li>
       <li><a href="inspiration.html">Inspiration</a></li>
       <li><a href="contact.html" class="active">Contact</a></li>
@@ -284,6 +286,10 @@ textarea.fld{ width:100%; min-height:170px; resize:both; line-height:1.5; }
 
         <!-- LEFT: the message form -->
         <form class="form-side" id="contactForm" novalidate>
+          <input type="hidden" name="access_key" value="044b9dff-1d8e-4049-9793-840ffcfd47a6" />
+          <input type="hidden" name="subject" value="New message from mauricebrand.com" />
+          <input type="hidden" name="from_name" value="Maurice Brand — Website" />
+          <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true" style="display:none" />
           <div class="field-row">
             <label class="lbl" for="f-name">Name</label>
             <input class="fld" id="f-name" name="name" type="text" autocomplete="name" />
@@ -305,9 +311,13 @@ textarea.fld{ width:100%; min-height:170px; resize:both; line-height:1.5; }
             <span class="send-txt">Send Message</span>
             <span class="rule-h"></span>
           </button>
-          <p class="sent-note">
+          <p class="sent-note" id="sentNote">
             <span class="big">Sent.</span>
             Your letter is on its way — thank you for writing.
+          </p>
+          <p class="sent-note" id="errNote">
+            <span class="big">Undelivered.</span>
+            Something went astray — please try again, or write directly to <a href="mailto:mauricebrand@gmail.com" style="color:inherit">mauricebrand@gmail.com</a>.
           </p>
         </form>
 
@@ -315,7 +325,7 @@ textarea.fld{ width:100%; min-height:170px; resize:both; line-height:1.5; }
         <div class="addr-side">
           <div class="addr-lines">
             <div class="rust-rule"></div>
-            <div class="aline email"><span class="to">To:</span> <a href="mailto:hello@mauricebrand.com">hello@mauricebrand.com</a></div>
+            <div class="aline email"><span class="to">To:</span> <a href="mailto:mauricebrand@gmail.com">mauricebrand@gmail.com</a></div>
             <div class="aline"></div>
             <div class="aline msg">I read every message and value</div>
             <div class="aline msg">the time you take to write.</div>
@@ -407,15 +417,62 @@ textarea.fld{ width:100%; min-height:170px; resize:both; line-height:1.5; }
   for(let y=step/2; y<=H-step/2+0.1; y+=step){ add(5,y); add(W-5,y); }
 })();
 
-/* submit → confirmation in place (no backend) */
+/* submit → send through Web3Forms, then confirm in place */
 (function(){
   const form=document.getElementById('contactForm');
-  form.addEventListener('submit', e=>{
+  const btn=form.querySelector('.send');
+  const btnTxt=form.querySelector('.send-txt');
+  form.addEventListener('submit', async e=>{
     e.preventDefault();
-    form.classList.add('is-sent');
+    if(btn.classList.contains('is-busy')) return;
+    form.classList.remove('is-error');
+    btn.classList.add('is-busy');
+    const original=btnTxt.textContent;
+    btnTxt.textContent='Sending\u2026';
+    try{
+      const res=await fetch('https://api.web3forms.com/submit',{
+        method:'POST',
+        headers:{ 'Accept':'application/json' },
+        body:new FormData(form)
+      });
+      const data=await res.json();
+      if(res.ok && data.success){
+        form.classList.add('is-sent');
+      }else{
+        throw new Error(data.message||'send failed');
+      }
+    }catch(err){
+      form.classList.add('is-error');
+      btn.classList.remove('is-busy');
+      btnTxt.textContent=original;
+    }
   });
 })();
 </script>
 
+<script async data-uid="e19f60bc29" src="https://maurice-brand.kit.com/e19f60bc29/index.js"></script>
+<script>
+/* drop the fixed site header below the Kit sticky bar so the menu sits under the signup form */
+(function(){
+  var root=document.documentElement;
+  function findBar(){
+    var s=document.querySelector('.formkit-sticky-bar,.seva-sticky-bar,[data-format="sticky"],[data-format="sticky-bar"]');
+    if(s) return s;
+    var f=document.querySelector('div[data-uid="e19f60bc29"],form[data-uid="e19f60bc29"]');
+    if(f){ var el=f; while(el&&el!==document.body){ var p=getComputedStyle(el).position; if(p==='fixed'||p==='sticky') return el; el=el.parentElement; } return f; }
+    return null;
+  }
+  function update(){
+    var bar=findBar(), h=0;
+    if(bar){ var r=bar.getBoundingClientRect(); var hgt=bar.offsetHeight||Math.round(r.height); if(r.top<=4 && hgt>10) h=hgt; }
+    root.style.setProperty('--kit-offset', h+'px');
+  }
+  update();
+  window.addEventListener('resize',update);
+  window.addEventListener('load',update);
+  var n=0, iv=setInterval(function(){ update(); if(++n>75) clearInterval(iv); },400);
+  if(window.MutationObserver){ new MutationObserver(update).observe(document.body,{childList:true,subtree:true}); }
+})();
+</script>
 </body>
 </html>
