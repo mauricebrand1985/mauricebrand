@@ -32,8 +32,17 @@ body{
   color:var(--ink);
   overflow:hidden;
   -webkit-font-smoothing:antialiased;
-  /* real desk-paper photograph, stretched to fill the viewport */
-  background:#d6cab2 url("desk-bg.jpg") center center / cover no-repeat fixed;
+  background:#d6cab2;
+}
+/* the desk photograph as a FIXED, viewport-sized layer (z-0, behind the scene).
+   Using a position:fixed element instead of `background-attachment:fixed` keeps
+   the image at native viewport resolution — crisp on the tall mobile page,
+   where a fixed body-background is blown up across the whole document and
+   rendered blurry by mobile browsers. brightness() lifts the paper ~8%. */
+.desk-bg{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:#d6cab2 url("desk-bg.jpg") center center / cover no-repeat;
+  filter:brightness(1.08);
 }
 /* the photographic desk already carries tone; keep these overlays minimal */
 .desk-stains{
@@ -430,6 +439,16 @@ nav.menu a.active::after{ height:1.5px; }
     filter:drop-shadow(2px 11px 14px rgba(40,28,12,0.45));
     -webkit-user-drag:none; user-select:none; pointer-events:none; }
 
+  /* ---- envelope (contact) ---- */
+  .m-envelope{ position:relative; z-index:2; display:block;
+    width:clamp(118px,21%,224px); margin:clamp(34px,6vw,80px) auto;
+    opacity:0; transform:translateY(34px);
+    transition:opacity 1.05s ease, transform 1.05s cubic-bezier(.2,.7,.2,1); }
+  .m-envelope.in{ opacity:1; transform:none; }
+  .m-envelope img{ display:block; width:100%; height:auto;
+    filter:saturate(0.85) brightness(0.94) drop-shadow(2px 9px 11px rgba(40,28,12,0.4));
+    -webkit-user-drag:none; user-select:none; pointer-events:none; }
+
   /* ---- tagline + cta ---- */
   .m-lede{ position:relative; z-index:2; text-align:center; width:min(760px,86%); margin:0 auto;
     opacity:0; transform:translateY(30px);
@@ -445,12 +464,15 @@ nav.menu a.active::after{ height:1.5px; }
 }
 
 @media (prefers-reduced-motion: reduce){
-  .m-scrap-wrap,.m-portrait,.m-lede{ opacity:1 !important; transform:none !important; transition:none !important; }
+  .m-scrap-wrap,.m-portrait,.m-envelope,.m-lede{ opacity:1 !important; transform:none !important; transition:none !important; }
   .m-enter .m-arr{ animation:none; }
 }
 </style>
 </head>
 <body>
+
+<!-- desk photograph, fixed to the viewport (sharp on mobile + brightened) -->
+<div class="desk-bg"></div>
 
 <!-- SVG filters: paper edges, ink roughening, pen roughening -->
 <svg width="0" height="0" aria-hidden="true" style="position:absolute">
@@ -532,7 +554,7 @@ nav.menu a.active::after{ height:1.5px; }
 
   <main class="m-column">
 
-    <!-- 1 · HERO — the tiger (largest) -->
+    <!-- 1 · note 6 — HERO, the tiger (largest) -->
     <div class="m-scrap-wrap first">
       <a class="m-scrap m-hand-neat" href="/short-stories" style="--dx:0;--rot:-1.2deg;width:88%;aspect-ratio:552/400;--fs:5.98cqw;--lg:0.54cqw;--ty:12%;--htilt:-2deg;">
         <img class="m-paper-img" src="paper-center.webp" alt="" />
@@ -548,7 +570,44 @@ nav.menu a.active::after{ height:1.5px; }
       </a>
     </div>
 
-    <!-- 2 · the lights / dandelions (on the lined card of the pair) -->
+    <!-- 2 · TAGLINE -->
+    <div class="m-lede">
+      <p>Literary fiction, psychological surrealism, and stories of grief, identity, and the difficult work of becoming.</p>
+    </div>
+
+    <!-- 3 · PORTRAIT -->
+    <a class="m-portrait" href="/biography" aria-label="Maurice Brand — biography">
+      <img src="author-photo.webp" alt="Maurice Brand" />
+    </a>
+
+    <!-- 4 · note 4 — thanks, I don't do neighboring (novels) -->
+    <div class="m-scrap-wrap">
+      <a class="m-scrap m-hand-rush" href="/novels" style="--dx:-3%;--rot:-2deg;width:80%;aspect-ratio:296/214;--fs:8.6cqw;--lg:1cqw;--ty:33%;--htilt:-1deg;">
+        <img class="m-paper-img" src="paper-taped.webp" alt="" />
+        <div class="m-hw">
+          <div class="m-ln"><span class="m-ink">Thanks, I said, but</span></div>
+          <div class="m-ln"><span class="m-ink">I don't do neighboring.</span></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 5 · ENVELOPE (contact) -->
+    <a class="m-envelope" href="/contact" aria-label="Maurice Brand — contact">
+      <img src="envelope-closed.webp" alt="Contact" />
+    </a>
+
+    <!-- 6 · note 3 — they held news / kitchen towel -->
+    <div class="m-scrap-wrap">
+      <a class="m-scrap m-hand-rush" href="/inspiration" style="--dx:-4%;--rot:2deg;width:82%;aspect-ratio:288/187;--fs:9.03cqw;--lg:1.04cqw;--ty:14%;">
+        <img class="m-paper-img" src="paper-lined2.webp" alt="" />
+        <div class="m-hw">
+          <div class="m-ln"><span class="m-ink">They held news.</span></div>
+          <div class="m-ln"><span class="m-ink">I held a kitchen towel.</span></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 7 · note 1 — the lights / dandelions -->
     <div class="m-scrap-wrap">
       <a class="m-scrap m-hand-neat" href="/short-stories" style="--dx:-2%;--rot:1.4deg;width:80%;aspect-ratio:474/351;--fs:6.33cqw;--lg:0.42cqw;--htilt:-3deg;">
         <img class="m-paper-img" src="topleft-pair.webp" alt="" />
@@ -561,7 +620,7 @@ nav.menu a.active::after{ height:1.5px; }
       </a>
     </div>
 
-    <!-- 3 · the cold had moved to my teeth -->
+    <!-- 8 · note 2 — the cold had moved to my teeth -->
     <div class="m-scrap-wrap">
       <a class="m-scrap m-hand-small" href="/biography" style="--dx:4%;--rot:-2.2deg;width:76%;aspect-ratio:286/206;--fs:11.5cqw;--lg:1.05cqw;--ty:34%;--htilt:-4deg;">
         <img class="m-paper-img" src="paper-lined.webp" alt="" />
@@ -572,29 +631,7 @@ nav.menu a.active::after{ height:1.5px; }
       </a>
     </div>
 
-    <!-- 4 · they held news / kitchen towel -->
-    <div class="m-scrap-wrap">
-      <a class="m-scrap m-hand-rush" href="/inspiration" style="--dx:-4%;--rot:2deg;width:82%;aspect-ratio:288/187;--fs:9.03cqw;--lg:1.04cqw;--ty:14%;">
-        <img class="m-paper-img" src="paper-lined2.webp" alt="" />
-        <div class="m-hw">
-          <div class="m-ln"><span class="m-ink">They held news.</span></div>
-          <div class="m-ln"><span class="m-ink">I held a kitchen towel.</span></div>
-        </div>
-      </a>
-    </div>
-
-    <!-- · thanks, I don't do neighboring (novels) -->
-    <div class="m-scrap-wrap">
-      <a class="m-scrap m-hand-rush" href="/novels" style="--dx:-3%;--rot:-2deg;width:80%;aspect-ratio:296/214;--fs:8.6cqw;--lg:1cqw;--ty:33%;--htilt:-1deg;">
-        <img class="m-paper-img" src="paper-taped.webp" alt="" />
-        <div class="m-hw">
-          <div class="m-ln"><span class="m-ink">Thanks, I said, but</span></div>
-          <div class="m-ln"><span class="m-ink">I don't do neighboring.</span></div>
-        </div>
-      </a>
-    </div>
-
-    <!-- 5 · morning reduced the distances (fabric-backed, flat) -->
+    <!-- 9 · note 5 — morning reduced the distances (fabric-backed, flat) -->
     <div class="m-scrap-wrap">
       <a class="m-scrap flat m-hand-rush" href="/short-stories" style="--dx:3%;--rot:-1.4deg;width:84%;aspect-ratio:380/289;--fs:6.84cqw;--lg:0.79cqw;--ty:30%;--htilt:-8deg;">
         <img class="m-paper-img" src="paper-fabric.webp" alt="" />
@@ -606,14 +643,8 @@ nav.menu a.active::after{ height:1.5px; }
       </a>
     </div>
 
-    <!-- PORTRAIT -->
-    <a class="m-portrait" href="/biography" aria-label="Maurice Brand — biography">
-      <img src="author-photo.webp" alt="Maurice Brand" />
-    </a>
-
-    <!-- TAGLINE + CTA -->
+    <!-- 10 · CTA — enter the stories -->
     <div class="m-lede">
-      <p>Literary fiction, psychological surrealism, and stories of grief, identity, and the difficult work of becoming.</p>
       <a class="m-enter" href="/short-stories"><span class="m-bar"></span>Enter the stories<span class="m-arr">↓</span></a>
     </div>
 
@@ -981,7 +1012,7 @@ document.querySelectorAll('[data-nav]').forEach(a=>{ if(a.tagName==='A'){ a.addE
   }
 
   /* papers turn over one at a time as they enter the viewport */
-  const reveal = document.querySelectorAll('.m-scrap-wrap, .m-portrait, .m-lede');
+  const reveal = document.querySelectorAll('.m-scrap-wrap, .m-portrait, .m-envelope, .m-lede');
   if('IntersectionObserver' in window && !reduceMotion){
     const io = new IntersectionObserver((entries)=>{
       entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
