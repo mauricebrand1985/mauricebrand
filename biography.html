@@ -30,8 +30,9 @@ body{
   margin:0; min-height:100%;
   font-family:var(--serif); color:var(--ink);
   -webkit-font-smoothing:antialiased;
-  background:#d6cab2 url("desk-bg.jpg") center top / cover no-repeat fixed;
+  background:#d6cab2;
 }
+.desk-bg{ position:fixed; inset:0; z-index:-1; pointer-events:none; background:#d6cab2 url("desk-bg.jpg") center center / cover no-repeat; filter:brightness(1.08); }
 
 /* ---- fixed photographic overlays so the page reads as one aged photo ---- */
 .fx{ position:fixed; inset:0; pointer-events:none; }
@@ -210,6 +211,7 @@ nav.menu a.active::after{ height:1.5px; }
 </style>
 </head>
 <body>
+<div class="desk-bg"></div>
 
 <template id="__bundler_thumbnail">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
