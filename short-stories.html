@@ -32,7 +32,8 @@ body{
   -webkit-font-smoothing:antialiased;
   background:#d2cbbc;
 }
-.desk-bg{ position:fixed; inset:0; z-index:-1; pointer-events:none; background:#d2cbbc url("desk-bg.jpg") center center / cover no-repeat; filter:brightness(1.08); }
+.desk-bg{ position:fixed; inset:0; z-index:-1; pointer-events:none; background:#d2cbbc url("desk-bg.jpg") center center / cover no-repeat; filter:brightness(1.035) saturate(0.9); }
+@media (max-width:1024px){ .desk-bg{ filter:brightness(0.972) saturate(0.9); } }
 
 /* ---- fixed photographic overlays ---- */
 .fx{ position:fixed; inset:0; pointer-events:none; }
@@ -56,7 +57,7 @@ body{
   font-size:clamp(16px,1.35vw,21px); letter-spacing:0.24em; text-transform:uppercase;
   color:#2f2719; pointer-events:auto; white-space:nowrap; text-decoration:none;
   padding-bottom:8px; padding-right:2px; border-bottom:1px solid #241d10; line-height:1;
-  text-shadow:0 0 12px rgba(247,240,223,0.5), 0 0 22px rgba(247,240,223,0.32);
+  text-shadow:0 0 4.5px rgba(255,255,255,0.2),0 0 9px rgba(255,255,255,0.2),0 0 16.5px rgba(255,255,255,0.2),0 0 27px rgba(255,255,255,0.2);
 }
 .wordmark .dot{ opacity:.5; padding:0 .12em; }
 nav.menu{ pointer-events:auto; }
@@ -65,7 +66,7 @@ nav.menu li{ white-space:nowrap; }
 nav.menu a{
   font-family:var(--serif); font-weight:500; font-size:clamp(11px,0.92vw,14px); letter-spacing:0.13em; text-transform:uppercase;
   color:#453a28; text-decoration:none; padding-bottom:4px; position:relative; transition:color .35s ease; white-space:nowrap;
-  text-shadow:0 0 11px rgba(247,240,223,0.42), 0 0 18px rgba(247,240,223,0.26);
+  text-shadow:0 0 4.5px rgba(255,255,255,0.2),0 0 9px rgba(255,255,255,0.2),0 0 16.5px rgba(255,255,255,0.2),0 0 27px rgba(255,255,255,0.2);
 }
 nav.menu a::before{ content:""; position:absolute; left:0; right:0; bottom:0; height:1px; background:currentColor; opacity:0.16; }
 nav.menu a::after{ content:""; position:absolute; left:0; right:100%; bottom:0; height:1px; background:var(--ink); transition:right .42s cubic-bezier(.2,.7,.2,1); }
