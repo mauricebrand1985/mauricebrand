@@ -85,8 +85,10 @@ nav.menu a.active::after{ height:1.5px; }
 
 /* ---- the torn-paper sheet (matches Biography / Inspiration) ---- */
 .sheet{
-  position:relative;
-  background:url("bio-paper.webp") 0 0 / 100% 100% no-repeat;
+  position:relative; isolation:isolate; --cap:clamp(72px,9vw,112px);
+  background:
+    url("paper-top.webp") center top / 100% var(--cap) no-repeat,
+    url("paper-bottom.webp") center bottom / 100% var(--cap) no-repeat;
   filter:drop-shadow(3px 13px 17px rgba(38,26,12,0.34));
 }
 .sheet-inner{
@@ -135,7 +137,10 @@ nav.menu a.active::after{ height:1.5px; }
 
 /* ---- newsletter signup (torn-paper card, like the story cards) ---- */
 .signup{ margin:clamp(60px,9vh,116px) auto 0; max-width:600px; }
-.signup-card{ position:relative; background:url("bio-paper.webp") 0 0 / 100% 100% no-repeat;
+.signup-card{ position:relative; isolation:isolate; --cap:clamp(62px,7.5vw,94px);
+  background:
+    url("paper-top.webp") center top / 100% var(--cap) no-repeat,
+    url("paper-bottom.webp") center bottom / 100% var(--cap) no-repeat;
   filter:drop-shadow(3px 12px 16px rgba(38,26,12,0.32));
   padding:clamp(40px,5vw,62px) clamp(40px,5vw,68px) clamp(34px,4.5vw,52px); text-align:center; }
 .signup-card .signup-eyebrow{ margin:0 0 10px; font-family:var(--serif); font-weight:600; text-transform:uppercase; letter-spacing:0.16em; font-size:clamp(13px,1.05vw,15px); color:#b23a2e; }
@@ -182,6 +187,15 @@ nav.menu a.active::after{ height:1.5px; }
   body.m-nav-open .m-nav a{ opacity:1; transform:none; transition:opacity .5s ease var(--d,0s), transform .5s cubic-bezier(.2,.7,.2,1) var(--d,0s), color .35s ease; }
 }
 @media (max-width:1024px) and (hover:hover){ .m-nav a:hover::after{ left:0; right:0; } }
+
+/* repeating middle confined between the fixed torn caps — keeps desk showing through top/bottom frays */
+.sheet::before,.signup-card::before,.ins-card::before,.coda::before,.story-card::before{
+  content:""; position:absolute; z-index:-1; left:0; right:0;
+  top:calc(var(--cap) - 18px); bottom:calc(var(--cap) - 18px);
+  background:url("paper-mid.webp") center top / 100% auto repeat-y;
+  -webkit-mask:linear-gradient(180deg,transparent 0,#000 16px,#000 calc(100% - 16px),transparent 100%);
+          mask:linear-gradient(180deg,transparent 0,#000 16px,#000 calc(100% - 16px),transparent 100%); }
+
 </style>
 </head>
 <body>
